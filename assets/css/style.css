@@ -737,29 +737,23 @@ input, textarea, select {
   width: clamp(260px, 29vw, 442px);
   height: clamp(260px, 29vw, 442px);
   display: block;
-  background: radial-gradient(
-    ellipse 80% 80% at 50% 50%,
-    rgba(1, 6, 40, 0.95) 0%,
-    rgba(0, 4, 25, 0.70) 40%,
-    transparent 75%
-  );
   filter:
-    drop-shadow(0 0 22px rgba(0, 200, 255, 0.55))
-    drop-shadow(0 0 60px rgba(0, 120, 255, 0.28));
+    drop-shadow(0 0 18px rgba(210, 230, 255, 0.85))
+    drop-shadow(0 0 55px rgba(180, 215, 255, 0.45));
   animation: neon-outer-pulse 9s ease-in-out infinite;
 }
 
 @keyframes neon-outer-pulse {
   0%, 100% {
     filter:
-      drop-shadow(0 0 18px rgba(0,200,255,0.5))
-      drop-shadow(0 0 50px rgba(0,120,255,0.25));
+      drop-shadow(0 0 14px rgba(210, 230, 255, 0.75))
+      drop-shadow(0 0 45px rgba(180, 215, 255, 0.38));
   }
   50% {
     filter:
-      drop-shadow(0 0 36px rgba(0,220,255,0.95))
-      drop-shadow(0 0 90px rgba(0,140,255,0.55))
-      drop-shadow(0 0 140px rgba(0,229,255,0.28));
+      drop-shadow(0 0 28px rgba(230, 245, 255, 1.0))
+      drop-shadow(0 0 80px rgba(200, 225, 255, 0.65))
+      drop-shadow(0 0 130px rgba(180, 215, 255, 0.32));
   }
 }
 

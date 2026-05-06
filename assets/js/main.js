@@ -277,7 +277,6 @@ function initHeroWebGL() {
     obs.observe(hero);
   }
 
-  initNeonLogo();
 }
 
 /* --------------------------------------------------------------------------
