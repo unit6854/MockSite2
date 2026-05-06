@@ -737,7 +737,6 @@ input, textarea, select {
   width: clamp(260px, 29vw, 442px);
   height: clamp(260px, 29vw, 442px);
   display: block;
-  mix-blend-mode: screen;
   filter:
     drop-shadow(0 0 22px rgba(0, 200, 255, 0.55))
     drop-shadow(0 0 60px rgba(0, 120, 255, 0.28));

@@ -294,7 +294,8 @@ function initNeonLogo() {
 
   initLogoRotate();
 
-  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false })
+          || canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: false });
   if (!gl) return;
 
   gl.viewport(0, 0, CANVAS_SIZE, CANVAS_SIZE);
@@ -356,11 +357,6 @@ function initNeonLogo() {
       /* Slow global breath */
       float breath  = 0.91 + 0.09 * sin(u_time * 0.9);
 
-      /* Deep cobalt background with radial vignette */
-      float vig = 1.0 - length(uv - 0.5) * 1.15;
-      vig = clamp(vig, 0.0, 1.0);
-      vec3 bg = vec3(0.008, 0.025, 0.14) * vig;
-
       /* Glow palette (website cyan / blue) */
       vec3 colWide = vec3(0.0,  0.28, 0.88);   /* cobalt-blue outer */
       vec3 colMid  = vec3(0.0,  0.75, 1.0 );   /* cyan mid          */
@@ -371,16 +367,19 @@ function initNeonLogo() {
         core * shimmer
       );
 
-      /* Compose layers */
-      vec3 col = bg;
+      /* Compose glow layers — no opaque background so canvas is transparent */
+      vec3 col = vec3(0.0);
       col += colWide * g3 * 1.6  * breath;
       col += colMid  * g2 * 3.0  * breath;
       col += colMid  * g1 * 4.5  * breath;
       col += colCore * core * 3.5 * shimmer;
-
       col = min(col, vec3(1.0));
 
-      gl_FragColor = vec4(col, 1.0);
+      /* Alpha from glow luminance — dark pixels transparent, bright pixels opaque */
+      float lum = dot(col, vec3(0.299, 0.587, 0.114));
+      float alpha = clamp(lum * 2.5, 0.0, 1.0);
+
+      gl_FragColor = vec4(col, alpha);
     }
   `;
 
@@ -417,7 +416,7 @@ function initNeonLogo() {
 
   gl.uniform1i(uTex, 0);
   gl.uniform1f(uPx, 1.0 / CANVAS_SIZE);
-  gl.clearColor(0, 0.025, 0.14, 1);
+  gl.clearColor(0, 0, 0, 0);
 
   /* Load spartan.png → WebGL texture */
   const tex = gl.createTexture();
