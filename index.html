@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Warrior of God Tactical — Premium firearms, tactical gear, optics, ammunition & hunting supplies. Faith. Freedom. Firepower." />
+  <meta name="theme-color" content="#0d0d0d" />
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="Warrior of God Tactical" />
+  <meta property="og:description" content="Premium tactical firearms, optics, ammunition & hunting gear." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:image"       content="assets/images/og-image.webp" />
+
+  <title>Warrior of God Tactical — Equipped for Every Battle</title>
+
+  <!-- Age gate: check cookie before first paint — zero flash -->
+  <script>(function(){var ok=document.cookie.split(';').some(function(c){return c.trim().indexOf('wog_age_verified=')===0;});if(!ok){try{ok=localStorage.getItem('wog_age_verified')==='yes';}catch(e){}}if(ok)document.documentElement.classList.add('age-verified');})();</script>
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Three.js CDN (deferred — used for hero WebGL) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js" defer></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <!-- =====================================================================
+       AGE GATE MODAL
+       WP: This becomes a custom block or plugin shortcode with cookie logic
+       PHP hook: add_action('wp_footer', 'wog_render_age_gate');
+       ===================================================================== -->
+  <div id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-heading">
+    <div class="age-gate__overlay"></div>
+    <div class="age-gate__card">
+      <div class="age-gate__emblem">
+        <!-- WP: wp_get_attachment_image() for logo -->
+        <img src="assets/images/logo.png" alt="Warrior of God Tactical" class="age-gate__logo" onerror="this.style.display='none'" />
+        <div class="age-gate__cross" aria-hidden="true"></div>
+      </div>
+      <p class="age-gate__eyebrow">Entry Restriction</p>
+      <h2 id="age-gate-heading" class="age-gate__heading">Age Verification Required</h2>
+      <p class="age-gate__body">
+        You must be <strong>18 years of age or older</strong> to enter this website.
+        This site contains products and content related to firearms and tactical equipment
+        regulated by federal and state law.
+      </p>
+      <div class="age-gate__actions">
+        <button id="age-gate-confirm" class="btn btn--primary btn--lg">
+          I Am 18 or Older — Enter Site
+        </button>
+        <button id="age-gate-deny" class="btn btn--ghost btn--sm">
+          I Am Under 18 — Exit
+        </button>
+      </div>
+      <p class="age-gate__legal">
+        By entering, you confirm you are of legal age and agree to our
+        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       SITE WRAPPER
+       WP: <div class="wp-site-blocks">
+       ===================================================================== -->
+  <div id="site-wrapper" class="site-wrapper" hidden>
+
+    <!-- ==================================================================
+         HEADER / NAVIGATION
+         WP Block: core/template-part (header)
+         PHP: get_template_part('template-parts/header/header');
+         ================================================================== -->
+    <!-- wp:template-part {"slug":"header","theme":"wog-block-theme"} /-->
+    <header id="site-header" class="site-header" role="banner">
+      <div class="container site-header__inner">
+
+        <!-- Logo -->
+        <!-- wp:site-logo /-->
+        <a href="#hero" class="site-header__logo" aria-label="Warrior of God Tactical — Home">
+          <span class="nav-shield-glow">
+            <svg class="nav-shield-logo" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z"
+                    fill="rgba(14,165,233,0.07)" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M20 7 L32 12 L32 26 C32 34 20 43 20 43 C20 43 8 34 8 26 L8 12 Z"
+                    fill="none" stroke="#0ea5e9" stroke-width="0.8" stroke-linejoin="round" opacity="0.4"/>
+              <line x1="20" y1="13" x2="20" y2="38" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <line x1="11" y1="22" x2="29" y2="22" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="20" cy="22" r="2" fill="#0ea5e9" opacity="0.9"/>
+            </svg>
+          </span>
+          <span class="logo-text">WOG<em>Tactical</em></span>
+        </a>
+
+        <!-- Primary Navigation -->
+        <!-- wp:navigation {"ref":null,"overlayMenu":"never"} -->
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary Navigation">
+          <ul class="primary-nav__list" role="list">
+            <li><a href="#hero"    class="primary-nav__link">Home</a></li>
+            <li class="has-dropdown">
+              <a href="#shop" class="primary-nav__link" aria-haspopup="true" aria-expanded="false">
+                Shop <span class="nav-arrow" aria-hidden="true">&#x25BE;</span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li role="none"><a href="shop.html?tab=firearms"  role="menuitem">Firearms</a></li>
+                <li role="none"><a href="shop.html?tab=ammo"      role="menuitem">Ammunition</a></li>
+                <li role="none"><a href="shop.html?tab=magazines" role="menuitem">Magazines</a></li>
+                <li role="none"><a href="shop.html?tab=optics"    role="menuitem">Optics</a></li>
+                <li role="none"><a href="shop.html?tab=gear"      role="menuitem">Holsters &amp; Gear</a></li>
+                <li role="none"><a href="shop.html?tab=hunting"   role="menuitem">Hunting &amp; Camping</a></li>
+                <li role="none"><a href="shop.html?tab=apparel"   role="menuitem">Apparel</a></li>
+                <li role="none"><a href="manufacturers.html"      role="menuitem">Shop Manufacturers</a></li>
+              </ul>
+            </li>
+            <li><a href="#deals"   class="primary-nav__link">Deals</a></li>
+            <li><a href="#about"   class="primary-nav__link">About Us</a></li>
+            <li><a href="#contact" class="primary-nav__link">Contact</a></li>
+          </ul>
+        </nav>
+        <!-- /wp:navigation -->
+
+        <!-- Header Actions -->
+        <div class="site-header__actions">
+          <button class="icon-btn search-toggle" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </button>
+          <a href="cart.html" class="icon-btn cart-btn" aria-label="Shopping Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <span class="cart-count" aria-label="0 items">0</span>
+          </a>
+          <button class="mobile-menu-toggle" aria-label="Open Menu" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Search Panel -->
+      <div id="search-panel" class="search-panel" hidden>
+        <div class="container">
+          <form class="search-form" role="search" onsubmit="(function(e){e.preventDefault();var q=e.target.querySelector('input').value.trim();if(q)window.location.href='shop.html?q='+encodeURIComponent(q);})(event)">
+            <input type="search" placeholder="Search by brand, caliber, or product..." aria-label="Search products" />
+            <button type="submit" aria-label="Submit Search">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+    <!-- /wp:template-part -->
+
+    <main id="main-content" role="main">
+
+      <!-- ================================================================
+           HERO SECTION
+           WP Block: core/cover or custom wog/hero-block
+           PHP hook: do_action('wog_hero_section');
+           ================================================================ -->
+      <!-- wp:cover {"url":"{{hero_image}}","dimRatio":60,"minHeight":100,"minHeightUnit":"vh"} -->
+      <section id="hero" class="section-hero" aria-label="Hero Banner">
+
+        <!-- WebGL Canvas — degrades gracefully if Three.js fails -->
+        <canvas id="hero-canvas" class="hero-canvas" aria-hidden="true"></canvas>
+
+        <!-- Hero BG image (CSS fallback if WebGL disabled) -->
+        <div class="hero-bg" aria-hidden="true">
+          <img src="assets/images/hero-bg.webp"
+               alt=""
+               loading="eager"
+               fetchpriority="high"
+               class="hero-bg__img"
+               onerror="this.style.display='none'" />
+          <div class="hero-bg__overlay"></div>
+        </div>
+
+        <div class="container hero__inner">
+
+          <!-- Text column -->
+          <div class="hero__content">
+            <p class="hero__eyebrow animate-on-scroll" data-animation="fade-down">Faith &bull; Freedom &bull; Firepower</p>
+            <h1 class="hero__heading animate-on-scroll" data-animation="fade-up">
+              Equipped for<br /><em>Every Battle</em>
+            </h1>
+            <p class="hero__subheading animate-on-scroll" data-animation="fade-up" data-delay="100">
+              Premium tactical firearms, optics, ammunition &amp; hunting gear —
+              for those who stand ready.
+            </p>
+            <div class="hero__actions animate-on-scroll" data-animation="fade-up" data-delay="200">
+              <a href="#shop"  class="btn btn--primary btn--lg">Shop Now</a>
+              <a href="#deals" class="btn btn--outline btn--lg">View Deals</a>
+            </div>
+          </div>
+
+          <!-- Neon logo — wp:html for Gutenberg raw embed -->
+          <!-- wp:html -->
+          <div class="hero__logo-wrap" aria-hidden="true">
+            <!-- WebGL neon shader renders spartan.png with living cyan glow -->
+            <canvas id="logo-neon-canvas" class="hero-logo-canvas" draggable="false" aria-label="Warrior of God Tactical Neon Shield"></canvas>
+            <p class="logo-rotate-hint" id="logo-rotate-hint">↺&ensp;ROTATE&ensp;↻</p>
+          </div>
+          <!-- /wp:html -->
+
+        </div>
+
+        <!-- Scroll indicator -->
+        <a href="#shop" class="scroll-indicator" aria-label="Scroll down to explore">
+          <span class="scroll-indicator__label">Explore Our Arsenal</span>
+          <span class="scroll-indicator__arrow" aria-hidden="true"></span>
+        </a>
+
+      </section>
+      <!-- /wp:cover -->
+
+      <!-- ================================================================
+           TRUST BAR
+           WP Block: wog/trust-bar
+           PHP hook: do_action('wog_trust_bar');
+           ================================================================ -->
+      <!-- wp:group {"layout":{"type":"constrained"}} -->
+      <section class="trust-bar" aria-label="Trust Indicators">
+        <div class="container trust-bar__inner">
+          <div class="trust-bar__item animate-on-scroll" data-animation="fade-up">
+            <svg class="trust-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <div><strong>Secure Checkout</strong><span>SSL &amp; PCI Compliant</span></div>
+          </div>
+          <div class="trust-bar__item animate-on-scroll" data-animation="fade-up" data-delay="75">
+            <svg class="trust-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div><strong>Fast Shipping</strong><span>FFL Transfer Available</span></div>
+          </div>
+          <div class="trust-bar__item animate-on-scroll" data-animation="fade-up" data-delay="150">
+            <svg class="trust-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div><strong>FFL Licensed</strong><span>Federally Licensed Dealer</span></div>
+          </div>
+          <div class="trust-bar__item animate-on-scroll" data-animation="fade-up" data-delay="225">
+            <svg class="trust-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <div><strong>Expert Support</strong><span>Talk to a Real Shooter</span></div>
+          </div>
+        </div>
+      </section>
+      <!-- /wp:group -->
+
+      <div class="wog-divider" aria-hidden="true">
+        <div class="wog-divider__line wog-divider__line--left"></div>
+        <div class="wog-divider__gem"></div>
+        <div class="wog-divider__line wog-divider__line--right"></div>
+      </div>
+
+      <!-- ================================================================
+           FEATURED PRODUCTS — Homepage spotlight (6–8 items)
+           Full catalog: shop.html
+           WP Block: wog/featured-products (custom block)
+           ================================================================ -->
+      <!-- wp:group {"anchor":"shop"} -->
+      <section id="shop" class="section section--dark" aria-label="Featured Products">
+        <div class="container">
+          <header class="section__header animate-on-scroll" data-animation="fade-up">
+            <p class="section__eyebrow">Top Picks</p>
+            <h2 class="section__heading">Featured Products</h2>
+            <p class="section__sub">Handpicked firearms, ammo, optics &amp; gear — trusted by our team.</p>
+          </header>
+
+          <!-- wp:woocommerce/product-collection -->
+          <div class="product-grid" id="product-grid" role="list" aria-live="polite">
+            <!-- Featured products injected by main.js from products.js -->
+          </div>
+          <!-- /wp:woocommerce/product-collection -->
+
+          <div class="section__footer animate-on-scroll" data-animation="fade-up">
+            <a href="shop.html" class="btn btn--outline">View Full Catalog</a>
+          </div>
+        </div>
+      </section>
+      <!-- /wp:group -->
+
+      <div class="wog-divider" aria-hidden="true">
+        <div class="wog-divider__line wog-divider__line--left"></div>
+        <div class="wog-divider__gem"></div>
+        <div class="wog-divider__line wog-divider__line--right"></div>
+      </div>
+
+      <!-- ================================================================
+           DEALS BANNER
+           WP Block: wog/deals-banner (custom ACF block)
+           PHP hook: do_action('wog_deals_banner');
+           ================================================================ -->
+      <!-- wp:group {"anchor":"deals","backgroundColor":"primary"} -->
+      <section id="deals" class="section section--deals" aria-label="Current Deals">
+        <div class="container">
+          <div class="deals-banner animate-on-scroll" data-animation="fade-up">
+            <div class="deals-banner__content">
+              <p class="deals-banner__eyebrow">Limited Time</p>
+              <h2 class="deals-banner__heading">This Week's Deals</h2>
+              <p class="deals-banner__sub">Limited-time savings on top brands. Check back weekly — inventory moves fast.</p>
+              <div class="deals-banner__highlight">
+                <span class="deals-badge">DEAL OF THE WEEK</span>
+                <p class="deals-banner__offer">Up to <strong>30% Off</strong> Select Optics</p>
+                <p class="deals-banner__offer-sub">Clearance on Bushnell, Vortex &amp; Pulsar — while supplies last.</p>
+              </div>
+              <a href="#" class="btn btn--primary btn--lg">Shop Optics Deals</a>
+            </div>
+            <div class="deals-banner__visual" aria-hidden="true">
+              <img src="assets/images/optics.webp" alt="" loading="lazy" class="deals-banner__img" />
+              <div class="deals-banner__glow"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- /wp:group -->
+
+      <div class="wog-divider" aria-hidden="true">
+        <div class="wog-divider__line wog-divider__line--left"></div>
+        <div class="wog-divider__gem"></div>
+        <div class="wog-divider__line wog-divider__line--right"></div>
+      </div>
+
+      <!-- ================================================================
+           ABOUT / MISSION
+           WP Block: wog/about-mission (custom ACF block)
+           PHP hook: do_action('wog_mission_section');
+           ================================================================ -->
+      <!-- wp:group {"anchor":"about"} -->
+      <section id="about" class="section section--about" aria-label="About Warrior of God Tactical">
+        <div class="container">
+          <div class="about-grid">
+
+            <div class="about-grid__content">
+              <p class="section__eyebrow animate-on-scroll" data-animation="fade-right">Our Mission</p>
+              <h2 class="section__heading animate-on-scroll" data-animation="fade-right" data-delay="75">
+                Built on Faith.<br />Built for Freedom.
+              </h2>
+              <div class="about-grid__text animate-on-scroll" data-animation="fade-right" data-delay="150">
+                <p>Warrior of God Tactical was founded on the belief that the right to keep and bear arms is both a constitutional right and a God-given responsibility. We serve law-abiding citizens, hunters, competitive shooters, and those who choose to protect their families and communities.</p>
+                <p>We carry only the products we believe in — sourced from trusted manufacturers, priced fairly, and backed by people who actually use them. Every member of our team is a shooter, hunter, or tactical enthusiast.</p>
+                <p>Whether you're building your first defensive setup or upgrading your competition rig, we're here to help you get it right.</p>
+              </div>
+              <a href="#contact" class="btn btn--primary animate-on-scroll" data-animation="fade-up" data-delay="200">Get in Touch</a>
+            </div>
+
+            <div class="about-grid__image animate-on-scroll" data-animation="fade-left">
+              <img src="assets/images/team_home_2.webp" alt="The Warrior of God Tactical team" loading="lazy" />
+            </div>
+
+          </div>
+
+          <!-- Values Grid -->
+          <div class="values-grid" aria-label="Our Core Values">
+            <div class="values-grid__item animate-on-scroll" data-animation="fade-up">
+              <span class="values-grid__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="32" cy="32" r="29" stroke="#0ea5e9" stroke-width="0.8" stroke-dasharray="4 5" opacity="0.3"/>
+                  <rect x="27" y="7" width="10" height="50" rx="3" fill="rgba(14,165,233,0.13)" stroke="#0ea5e9" stroke-width="1.8"/>
+                  <rect x="11" y="19" width="42" height="10" rx="3" fill="rgba(14,165,233,0.13)" stroke="#0ea5e9" stroke-width="1.8"/>
+                  <circle cx="32" cy="24" r="3.5" fill="#0ea5e9" opacity="0.9"/>
+                  <line x1="32" y1="4" x2="32" y2="7" stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+                  <line x1="32" y1="57" x2="32" y2="60" stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+                </svg>
+              </span>
+              <h3 class="values-grid__title">Faith</h3>
+              <p class="values-grid__body">Rooted in Christian values of service, integrity, and responsibility.</p>
+            </div>
+            <div class="values-grid__item animate-on-scroll" data-animation="fade-up" data-delay="75">
+              <span class="values-grid__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="32" cy="38" rx="6" ry="9" fill="rgba(14,165,233,0.12)" stroke="#0ea5e9" stroke-width="1.8"/>
+                  <circle cx="32" cy="21" r="6.5" fill="rgba(14,165,233,0.12)" stroke="#0ea5e9" stroke-width="1.8"/>
+                  <path d="M38 21 L46 23.5 L38 25.5 Z" fill="#0ea5e9"/>
+                  <path d="M26 32 C20 26 10 18 2 22 C7 26 16 30 26 36" fill="rgba(14,165,233,0.09)" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+                  <path d="M3 21 L5 13 M3 21 L9 12 M3 21 L15 13" stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+                  <path d="M38 32 C44 26 54 18 62 22 C57 26 48 30 38 36" fill="rgba(14,165,233,0.09)" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+                  <path d="M61 21 L59 13 M61 21 L55 12 M61 21 L49 13" stroke="#0ea5e9" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+                  <path d="M28 46 L24 60 M32 47 L32 61 M36 46 L40 60" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="34" cy="20" r="1.8" fill="#0ea5e9"/>
+                </svg>
+              </span>
+              <h3 class="values-grid__title">Freedom</h3>
+              <p class="values-grid__body">Committed to defending constitutional rights for every law-abiding citizen.</p>
+            </div>
+            <div class="values-grid__item animate-on-scroll" data-animation="fade-up" data-delay="150">
+              <span class="values-grid__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="32" cy="32" r="28" stroke="#0ea5e9" stroke-width="1.8"/>
+                  <circle cx="32" cy="32" r="16" stroke="#0ea5e9" stroke-width="1" opacity="0.5"/>
+                  <circle cx="32" cy="32" r="4" fill="#0ea5e9" opacity="0.95"/>
+                  <line x1="32" y1="4" x2="32" y2="22" stroke="#0ea5e9" stroke-width="1.8" stroke-linecap="round"/>
+                  <line x1="32" y1="42" x2="32" y2="60" stroke="#0ea5e9" stroke-width="1.8" stroke-linecap="round"/>
+                  <line x1="4" y1="32" x2="22" y2="32" stroke="#0ea5e9" stroke-width="1.8" stroke-linecap="round"/>
+                  <line x1="42" y1="32" x2="60" y2="32" stroke="#0ea5e9" stroke-width="1.8" stroke-linecap="round"/>
+                  <line x1="32" y1="16" x2="32" y2="20" stroke="#0ea5e9" stroke-width="1.2" opacity="0.5"/>
+                  <line x1="32" y1="44" x2="32" y2="48" stroke="#0ea5e9" stroke-width="1.2" opacity="0.5"/>
+                  <line x1="16" y1="32" x2="20" y2="32" stroke="#0ea5e9" stroke-width="1.2" opacity="0.5"/>
+                  <line x1="44" y1="32" x2="48" y2="32" stroke="#0ea5e9" stroke-width="1.2" opacity="0.5"/>
+                  <path d="M8 8 L8 14 L14 14" stroke="#0ea5e9" stroke-width="1" opacity="0.35" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M56 8 L56 14 L50 14" stroke="#0ea5e9" stroke-width="1" opacity="0.35" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 56 L8 50 L14 50" stroke="#0ea5e9" stroke-width="1" opacity="0.35" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M56 56 L56 50 L50 50" stroke="#0ea5e9" stroke-width="1" opacity="0.35" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <h3 class="values-grid__title">Quality</h3>
+              <p class="values-grid__body">Only gear we stand behind — tested, vetted, and trusted in the field.</p>
+            </div>
+            <div class="values-grid__item animate-on-scroll" data-animation="fade-up" data-delay="225">
+              <span class="values-grid__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="32" cy="16" r="6" fill="rgba(14,165,233,0.12)" stroke="#0ea5e9" stroke-width="1.8"/>
+                  <path d="M20 36 C20 26 44 26 44 36" fill="rgba(14,165,233,0.09)" stroke="#0ea5e9" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="13" cy="27" r="5" fill="rgba(14,165,233,0.1)" stroke="#0ea5e9" stroke-width="1.5" opacity="0.8"/>
+                  <path d="M3 44 C3 35 23 35 23 44" fill="rgba(14,165,233,0.06)" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+                  <circle cx="51" cy="27" r="5" fill="rgba(14,165,233,0.1)" stroke="#0ea5e9" stroke-width="1.5" opacity="0.8"/>
+                  <path d="M41 44 C41 35 61 35 61 44" fill="rgba(14,165,233,0.06)" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+                  <line x1="18" y1="23" x2="27" y2="18" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 3" opacity="0.5"/>
+                  <line x1="46" y1="23" x2="37" y2="18" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 3" opacity="0.5"/>
+                  <path d="M32 50 L29 57 L32 54 L35 57 Z" fill="#0ea5e9" opacity="0.8"/>
+                  <line x1="32" y1="36" x2="32" y2="50" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 3" opacity="0.4"/>
+                </svg>
+              </span>
+              <h3 class="values-grid__title">Community</h3>
+              <p class="values-grid__body">Serving hunters, competitors, and defenders across the country.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- /wp:group -->
+
+      <div class="wog-divider" aria-hidden="true">
+        <div class="wog-divider__line wog-divider__line--left"></div>
+        <div class="wog-divider__gem"></div>
+        <div class="wog-divider__line wog-divider__line--right"></div>
+      </div>
+
+      <!-- ================================================================
+           NEWSLETTER
+           WP Block: wog/newsletter (Mailchimp/FluentCRM integration)
+           PHP hook: do_action('wog_newsletter_section');
+           ================================================================ -->
+      <!-- wp:group {"backgroundColor":"dark"} -->
+      <section class="section section--newsletter" aria-label="Newsletter Signup">
+        <div class="container">
+          <div class="newsletter animate-on-scroll" data-animation="fade-up">
+            <div class="newsletter__content">
+              <h2 class="newsletter__heading">Join the WOG Community</h2>
+              <p class="newsletter__sub">Exclusive deals, new arrivals &amp; tactical tips — no spam, ever.</p>
+            </div>
+            <form class="newsletter__form" novalidate>
+              <!-- wp:search {"label":"Email","buttonText":"Subscribe"} /-->
+              <div class="newsletter__input-wrap">
+                <input type="email" name="email" placeholder="Enter your email address"
+                       aria-label="Email address for newsletter" required />
+                <button type="submit" class="btn btn--primary">Subscribe</button>
+              </div>
+              <p class="newsletter__disclaimer">No spam. Unsubscribe anytime.</p>
+            </form>
+          </div>
+        </div>
+      </section>
+      <!-- /wp:group -->
+
+      <div class="wog-divider" aria-hidden="true">
+        <div class="wog-divider__line wog-divider__line--left"></div>
+        <div class="wog-divider__gem"></div>
+        <div class="wog-divider__line wog-divider__line--right"></div>
+      </div>
+
+    </main>
+
+    <!-- ==================================================================
+         CONTACT SECTION
+         WP Block: wog/contact (Contact Form 7 or WPForms block)
+         ================================================================== -->
+    <!-- wp:group {"anchor":"contact"} -->
+    <section id="contact" class="section section--contact" aria-label="Contact Us">
+      <div class="container">
+        <header class="section__header animate-on-scroll" data-animation="fade-up">
+          <p class="section__eyebrow">Get in Touch</p>
+          <h2 class="section__heading">Contact Us</h2>
+          <p class="section__sub">Questions about a product, FFL transfers, or just want to talk gear? We're here.</p>
+        </header>
+
+        <div class="contact-grid">
+
+          <div class="contact-info animate-on-scroll" data-animation="fade-right">
+            <div class="contact-info__item">
+              <svg class="contact-info__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <div>
+                <strong>Phone</strong>
+                <a href="tel:+15558675309">(555) 867-5309</a>
+              </div>
+            </div>
+            <div class="contact-info__item">
+              <svg class="contact-info__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <div>
+                <strong>Email</strong>
+                <a href="mailto:info@warriorofgodtactical.com">info@warriorofgodtactical.com</a>
+              </div>
+            </div>
+            <div class="contact-info__item">
+              <svg class="contact-info__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <div>
+                <strong>Location</strong>
+                <span>123 Freedom Way, Liberty, TX 77575</span>
+              </div>
+            </div>
+            <div class="contact-info__item">
+              <svg class="contact-info__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div>
+                <strong>Hours</strong>
+                <span>Mon–Fri: 9AM–6PM | Sat: 9AM–4PM</span>
+              </div>
+            </div>
+          </div>
+
+          <form class="contact-form animate-on-scroll" data-animation="fade-left" novalidate>
+            <!-- wp:contact-form-7/contact-form-selector or WPForms block goes here -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contact-name">Full Name <span aria-hidden="true">*</span></label>
+                <input type="text" id="contact-name" name="name" required placeholder="John Doe" />
+              </div>
+              <div class="form-group">
+                <label for="contact-email">Email <span aria-hidden="true">*</span></label>
+                <input type="email" id="contact-email" name="email" required placeholder="john@example.com" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="contact-subject">Subject</label>
+              <select id="contact-subject" name="subject">
+                <option value="">— Select a topic —</option>
+                <option value="product">Product Question</option>
+                <option value="ffl">FFL Transfer</option>
+                <option value="order">Order / Shipping</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contact-message">Message <span aria-hidden="true">*</span></label>
+              <textarea id="contact-message" name="message" rows="5" required placeholder="Tell us how we can help..."></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary btn--lg btn--full">Send Message</button>
+          </form>
+
+        </div>
+      </div>
+    </section>
+    <!-- /wp:group -->
+
+    <!-- ==================================================================
+         FOOTER
+         WP Block: core/template-part (footer)
+         PHP: get_template_part('template-parts/footer/footer');
+         ================================================================== -->
+    <!-- wp:template-part {"slug":"footer","theme":"wog-block-theme"} /-->
+    <footer id="site-footer" class="site-footer" role="contentinfo">
+      <div class="container">
+
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a href="#hero" class="footer-brand__logo" aria-label="Warrior of God Tactical">
+              <svg class="footer-shield-logo" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z"
+                      fill="rgba(14,165,233,0.07)" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M20 7 L32 12 L32 26 C32 34 20 43 20 43 C20 43 8 34 8 26 L8 12 Z"
+                      fill="none" stroke="#0ea5e9" stroke-width="0.8" stroke-linejoin="round" opacity="0.4"/>
+                <line x1="20" y1="13" x2="20" y2="38" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+                <line x1="11" y1="22" x2="29" y2="22" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="20" cy="22" r="2" fill="#0ea5e9" opacity="0.9"/>
+              </svg>
+            </a>
+            <p class="footer-brand__tagline">Equipped for Every Battle.</p>
+            <div class="footer-social">
+              <a href="#" class="footer-social__link" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+              <a href="#" class="footer-social__link" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+              <a href="#" class="footer-social__link" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="#0d0d0d" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+              </a>
+              <a href="#" class="footer-social__link" aria-label="X (Twitter)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <nav class="footer-nav" aria-label="Footer Navigation">
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Quick Links</h3>
+              <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#shop">Shop</a></li>
+                <li><a href="#deals">Deals</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Categories</h3>
+              <ul>
+                <li><a href="shop.html?tab=firearms">Firearms</a></li>
+                <li><a href="shop.html?tab=ammo">Ammunition</a></li>
+                <li><a href="shop.html?tab=magazines">Magazines</a></li>
+                <li><a href="shop.html?tab=optics">Optics</a></li>
+                <li><a href="shop.html?tab=gear">Holsters &amp; Gear</a></li>
+                <li><a href="shop.html?tab=hunting">Hunting &amp; Camping</a></li>
+                <li><a href="shop.html?tab=apparel">Apparel</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Support</h3>
+              <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Shipping Policy</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">FFL Transfer Info</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+
+        <div class="footer-legal">
+          <p class="footer-legal__compliance">
+            All firearms sales comply with federal and state law.
+            FFL transfers required for shipped firearms.
+            Must be 18+ for long guns, 21+ for handguns.
+          </p>
+          <p class="footer-legal__copyright">
+            &copy; <span id="footer-year"></span> Warrior of God Tactical. All rights reserved.
+          </p>
+        </div>
+
+      </div>
+    </footer>
+    <!-- /wp:template-part -->
+
+  </div><!-- /#site-wrapper -->
+
+  <!-- Scripts -->
+  <script src="assets/js/content.js"></script>
+  <script src="assets/js/products.js" defer></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js" defer></script>
+
+</body>
+</html>

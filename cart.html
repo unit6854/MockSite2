@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0d0d0d" />
+  <title>Shopping Cart — Warrior of God Tactical</title>
+  <script>(function(){var ok=document.cookie.split(';').some(function(c){return c.trim().indexOf('wog_age_verified=')===0;});if(!ok){try{ok=localStorage.getItem('wog_age_verified')==='yes';}catch(e){}}if(ok)document.documentElement.classList.add('age-verified');})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <style>
+    .cart-page {
+      padding: calc(72px + 3rem) 0 5rem;
+      min-height: 70vh;
+    }
+    .cart-page__heading {
+      font-family: Oswald, sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: #fff;
+      margin: 0 0 2rem;
+    }
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    @media (max-width: 800px) {
+      .cart-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Items list */
+    .cart-items { display: flex; flex-direction: column; gap: 1rem; }
+    .cart-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 1.25rem;
+      align-items: center;
+      background: #0f1923;
+      border: 1px solid rgba(14,165,233,.12);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+    }
+    .cart-item__img {
+      width: 80px;
+      height: 60px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 4px;
+      display: block;
+    }
+    .cart-item__img-placeholder {
+      width: 80px;
+      height: 60px;
+      background: #1a2535;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,.2);
+      font-size: .65rem;
+      text-align: center;
+    }
+    .cart-item__info {}
+    .cart-item__brand {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #0ea5e9;
+      margin: 0 0 .2rem;
+    }
+    .cart-item__name {
+      font-family: Oswald, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e8f0f8;
+      margin: 0 0 .5rem;
+      line-height: 1.2;
+    }
+    .cart-item__qty-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .cart-item__qty-btn {
+      width: 28px;
+      height: 28px;
+      background: #1a2535;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 4px;
+      color: #e8f0f8;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+    }
+    .cart-item__qty-btn:hover { background: #243447; }
+    .cart-item__qty-val {
+      width: 32px;
+      text-align: center;
+      font-family: Oswald, sans-serif;
+      font-size: .95rem;
+      color: #fff;
+    }
+    .cart-item__right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: .6rem;
+    }
+    .cart-item__price {
+      font-family: Oswald, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .cart-item__remove {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,.3);
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      padding: 0;
+      transition: color .15s;
+    }
+    .cart-item__remove:hover { color: #e11d48; }
+
+    /* Empty state */
+    .cart-empty {
+      text-align: center;
+      padding: 5rem 1rem;
+    }
+    .cart-empty svg { opacity: .18; margin-bottom: 1.5rem; }
+    .cart-empty__heading {
+      font-family: Oswald, sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+      margin: 0 0 .75rem;
+    }
+    .cart-empty__sub {
+      color: rgba(255,255,255,.45);
+      margin: 0 0 2rem;
+    }
+
+    /* Summary panel */
+    .cart-summary {
+      background: #0f1923;
+      border: 1px solid rgba(14,165,233,.15);
+      border-radius: 8px;
+      padding: 1.5rem;
+      position: sticky;
+      top: calc(72px + 1rem);
+    }
+    .cart-summary__heading {
+      font-family: Oswald, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,.55);
+      margin: 0 0 1.25rem;
+    }
+    .cart-summary__row {
+      display: flex;
+      justify-content: space-between;
+      font-size: .9rem;
+      color: rgba(255,255,255,.65);
+      margin-bottom: .65rem;
+    }
+    .cart-summary__row--total {
+      font-family: Oswald, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .cart-summary__note {
+      font-size: .72rem;
+      color: rgba(255,255,255,.3);
+      margin: 1rem 0 1.25rem;
+      line-height: 1.5;
+    }
+    .cart-summary__checkout {
+      display: block;
+      width: 100%;
+      background: #0ea5e9;
+      color: #fff;
+      font-family: Oswald, sans-serif;
+      font-size: .9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      text-align: center;
+      padding: .875rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .18s;
+      margin-bottom: .75rem;
+    }
+    .cart-summary__checkout:hover { background: #0284c7; }
+    .cart-summary__continue {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: .8rem;
+      color: rgba(255,255,255,.4);
+      text-decoration: none;
+      padding: .4rem;
+      transition: color .15s;
+    }
+    .cart-summary__continue:hover { color: #0ea5e9; }
+    .cart-summary__clear {
+      display: block;
+      width: 100%;
+      background: none;
+      border: 1px solid rgba(255,255,255,.1);
+      color: rgba(255,255,255,.35);
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: .5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: .5rem;
+      transition: border-color .15s, color .15s;
+    }
+    .cart-summary__clear:hover { border-color: #e11d48; color: #e11d48; }
+  </style>
+</head>
+<body class="page--inner">
+
+  <!-- AGE GATE -->
+  <div id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-heading">
+    <div class="age-gate__overlay"></div>
+    <div class="age-gate__card">
+      <div class="age-gate__emblem">
+        <img src="assets/images/logo.png" alt="Warrior of God Tactical" class="age-gate__logo" onerror="this.style.display='none'" />
+        <div class="age-gate__cross" aria-hidden="true"></div>
+      </div>
+      <p class="age-gate__eyebrow">Entry Restriction</p>
+      <h2 id="age-gate-heading" class="age-gate__heading">Age Verification Required</h2>
+      <p class="age-gate__body">
+        You must be <strong>18 years of age or older</strong> to enter this website.
+        This site contains products and content related to firearms and tactical equipment
+        regulated by federal and state law.
+      </p>
+      <div class="age-gate__actions">
+        <button id="age-gate-confirm" class="btn btn--primary btn--lg">I Am 18 or Older — Enter Site</button>
+        <button id="age-gate-deny" class="btn btn--ghost btn--sm">I Am Under 18 — Exit</button>
+      </div>
+      <p class="age-gate__legal">
+        By entering, you confirm you are of legal age and agree to our
+        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+
+  <div id="site-wrapper" class="site-wrapper" hidden>
+
+    <!-- HEADER -->
+    <header id="site-header" class="site-header" role="banner">
+      <div class="container site-header__inner">
+        <a href="index.html" class="site-header__logo" aria-label="Warrior of God Tactical — Home">
+          <span class="nav-shield-glow">
+            <svg class="nav-shield-logo" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z"
+                    fill="rgba(14,165,233,0.07)" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M20 7 L32 12 L32 26 C32 34 20 43 20 43 C20 43 8 34 8 26 L8 12 Z"
+                    fill="none" stroke="#0ea5e9" stroke-width="0.8" stroke-linejoin="round" opacity="0.4"/>
+              <line x1="20" y1="13" x2="20" y2="38" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <line x1="11" y1="22" x2="29" y2="22" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="20" cy="22" r="2" fill="#0ea5e9" opacity="0.9"/>
+            </svg>
+          </span>
+          <span class="logo-text">WOG<em>Tactical</em></span>
+        </a>
+
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary Navigation">
+          <ul class="primary-nav__list" role="list">
+            <li><a href="index.html"          class="primary-nav__link">Home</a></li>
+            <li class="has-dropdown">
+              <a href="shop.html" class="primary-nav__link" aria-haspopup="true" aria-expanded="false">
+                Shop <span class="nav-arrow" aria-hidden="true">&#x25BE;</span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li role="none"><a href="shop.html?tab=firearms"  role="menuitem">Firearms</a></li>
+                <li role="none"><a href="shop.html?tab=ammo"      role="menuitem">Ammunition</a></li>
+                <li role="none"><a href="shop.html?tab=magazines" role="menuitem">Magazines</a></li>
+                <li role="none"><a href="shop.html?tab=optics"    role="menuitem">Optics</a></li>
+                <li role="none"><a href="shop.html?tab=gear"      role="menuitem">Holsters &amp; Gear</a></li>
+                <li role="none"><a href="shop.html?tab=hunting"   role="menuitem">Hunting &amp; Camping</a></li>
+                <li role="none"><a href="shop.html?tab=apparel"   role="menuitem">Apparel</a></li>
+              </ul>
+            </li>
+            <li><a href="index.html#deals"   class="primary-nav__link">Deals</a></li>
+            <li><a href="index.html#about"   class="primary-nav__link">About Us</a></li>
+            <li><a href="index.html#contact" class="primary-nav__link">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="site-header__actions">
+          <button class="icon-btn search-toggle" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </button>
+          <a href="cart.html" class="icon-btn cart-btn" aria-label="Shopping Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <span class="cart-count" aria-label="0 items">0</span>
+          </a>
+          <button class="mobile-menu-toggle" aria-label="Open Menu" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+
+      <div id="search-panel" class="search-panel" hidden>
+        <div class="container">
+          <form class="search-form" role="search" id="search-form">
+            <input type="search" id="search-input" placeholder="Search firearms, ammo, gear..." aria-label="Search products" />
+            <button type="submit" aria-label="Submit Search">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" role="main">
+      <section class="cart-page">
+        <div class="container">
+          <h1 class="cart-page__heading">Your Cart</h1>
+          <div class="cart-layout" id="cart-layout">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="site-footer" class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a href="index.html" class="footer-brand__logo" aria-label="Warrior of God Tactical">
+              <svg class="footer-shield-svg" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z" fill="rgba(14,165,233,0.09)" stroke="#0ea5e9" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M20 6 L34 12 L34 27 C34 36 20 45 20 45 C20 45 6 36 6 27 L6 12 Z" fill="none" stroke="#0ea5e9" stroke-width="0.7" stroke-linejoin="round" opacity="0.35"/>
+                <line x1="20" y1="13" x2="20" y2="39" stroke="#0ea5e9" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="10" y1="22" x2="30" y2="22" stroke="#0ea5e9" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="20" cy="22" r="2.5" fill="#0ea5e9" opacity="0.95"/>
+                <circle cx="20" cy="22" r="5" fill="none" stroke="#0ea5e9" stroke-width="0.6" opacity="0.4"/>
+              </svg>
+            </a>
+            <p class="footer-brand__tagline">Equipped for Every Battle.</p>
+          </div>
+          <nav class="footer-nav" aria-label="Footer Navigation">
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Quick Links</h3>
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop All</a></li>
+                <li><a href="index.html#deals">Deals</a></li>
+                <li><a href="index.html#about">About Us</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Categories</h3>
+              <ul>
+                <li><a href="shop.html?tab=firearms">Firearms</a></li>
+                <li><a href="shop.html?tab=ammo">Ammunition</a></li>
+                <li><a href="shop.html?tab=magazines">Magazines</a></li>
+                <li><a href="shop.html?tab=optics">Optics</a></li>
+                <li><a href="shop.html?tab=gear">Holsters &amp; Gear</a></li>
+                <li><a href="shop.html?tab=hunting">Hunting &amp; Camping</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Support</h3>
+              <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Shipping Policy</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">FFL Transfer Info</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="footer-legal">
+          <p class="footer-legal__compliance">
+            All firearms sales comply with federal and state law.
+            FFL transfers required for shipped firearms.
+            Must be 18+ for long guns, 21+ for handguns.
+          </p>
+          <p class="footer-legal__copyright">
+            &copy; <span id="footer-year"></span> Warrior of God Tactical. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /#site-wrapper -->
+
+  <script src="assets/js/cart.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    /* Age gate */
+    const siteWrapper = document.getElementById('site-wrapper');
+    if (document.documentElement.classList.contains('age-verified')) {
+      const g = document.getElementById('age-gate');
+      if (g) g.remove();
+      if (siteWrapper) siteWrapper.removeAttribute('hidden');
+    } else {
+      document.body.style.overflow = 'hidden';
+      document.getElementById('age-gate-confirm').addEventListener('click', function() {
+        const exp = new Date(Date.now() + 7 * 864e5).toUTCString();
+        document.cookie = 'wog_age_verified=yes;expires=' + exp + ';path=/;SameSite=Lax';
+        try { localStorage.setItem('wog_age_verified', 'yes'); } catch(e) {}
+        document.documentElement.classList.add('age-verified');
+        document.body.style.overflow = '';
+        if (siteWrapper) siteWrapper.removeAttribute('hidden');
+        const g = document.getElementById('age-gate');
+        if (g) { g.classList.add('hidden'); setTimeout(function(){ g.remove(); }, 400); }
+      });
+      document.getElementById('age-gate-deny').addEventListener('click', function() {
+        window.location.href = 'https://www.google.com';
+      });
+    }
+
+    /* Nav mobile */
+    const mobileBtn = document.querySelector('.mobile-menu-toggle');
+    const nav = document.getElementById('primary-nav');
+    if (mobileBtn && nav) {
+      mobileBtn.addEventListener('click', () => {
+        const open = nav.classList.toggle('nav--open');
+        mobileBtn.setAttribute('aria-expanded', open);
+      });
+    }
+
+    /* Search panel */
+    const searchToggle = document.querySelector('.search-toggle');
+    const searchPanel  = document.getElementById('search-panel');
+    if (searchToggle && searchPanel) {
+      searchToggle.addEventListener('click', () => {
+        searchPanel.hidden = !searchPanel.hidden;
+        if (!searchPanel.hidden) document.getElementById('search-input').focus();
+      });
+    }
+
+    /* Scroll header */
+    const header = document.getElementById('site-header');
+    if (header) window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 20); }, { passive: true });
+
+    /* Footer year */
+    const yr = document.getElementById('footer-year');
+    if (yr) yr.textContent = new Date().getFullYear();
+
+    /* ── Cart renderer ───────────────────────────────────────── */
+    function fmt(n) { return '$' + n.toFixed(2); }
+
+    function render() {
+      const layout = document.getElementById('cart-layout');
+      const items  = WOGCart.get();
+
+      if (items.length === 0) {
+        layout.innerHTML = `
+          <div class="cart-empty">
+            <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <p class="cart-empty__heading">Your cart is empty</p>
+            <p class="cart-empty__sub">Add some gear and come back.</p>
+            <a href="shop.html" class="btn btn--primary btn--lg">Browse the Shop</a>
+          </div>`;
+        return;
+      }
+
+      const subtotal = WOGCart.total();
+      const shipping = subtotal >= 100 ? 0 : 9.99;
+      const orderTotal = subtotal + shipping;
+
+      const itemsHTML = items.map(item => `
+        <div class="cart-item" data-id="${item.id}">
+          ${item.image
+            ? `<img class="cart-item__img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">`
+            : `<div class="cart-item__img-placeholder">No image</div>`}
+          <div class="cart-item__info">
+            ${item.brand ? `<p class="cart-item__brand">${item.brand}</p>` : ''}
+            <p class="cart-item__name">${item.name}</p>
+            <div class="cart-item__qty-row">
+              <button class="cart-item__qty-btn" data-action="dec" data-id="${item.id}" aria-label="Decrease quantity">&#8722;</button>
+              <span class="cart-item__qty-val">${item.qty}</span>
+              <button class="cart-item__qty-btn" data-action="inc" data-id="${item.id}" aria-label="Increase quantity">&#43;</button>
+            </div>
+          </div>
+          <div class="cart-item__right">
+            <span class="cart-item__price">${fmt(item.price * item.qty)}</span>
+            <button class="cart-item__remove" data-action="remove" data-id="${item.id}">Remove</button>
+          </div>
+        </div>`).join('');
+
+      layout.innerHTML = `
+        <div class="cart-items">${itemsHTML}</div>
+        <aside class="cart-summary">
+          <p class="cart-summary__heading">Order Summary</p>
+          <div class="cart-summary__row"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>
+          <div class="cart-summary__row"><span>Shipping</span><span>${shipping === 0 ? 'FREE' : fmt(shipping)}</span></div>
+          <div class="cart-summary__row cart-summary__row--total"><span>Total</span><span>${fmt(orderTotal)}</span></div>
+          <p class="cart-summary__note">Free shipping on orders over $100. FFL transfer fees apply to firearms.</p>
+          <a href="#" class="cart-summary__checkout">Proceed to Checkout</a>
+          <a href="shop.html" class="cart-summary__continue">&#8592; Continue Shopping</a>
+          <button class="cart-summary__clear" id="clear-cart-btn">Clear Cart</button>
+        </aside>`;
+
+      /* Bind item controls */
+      layout.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id  = btn.dataset.id;
+          const act = btn.dataset.action;
+          if (act === 'remove') {
+            WOGCart.remove(id);
+          } else {
+            const current = WOGCart.get().find(i => i.id === id);
+            if (!current) return;
+            WOGCart.update(id, current.qty + (act === 'inc' ? 1 : -1));
+          }
+          render();
+        });
+      });
+
+      const clearBtn = document.getElementById('clear-cart-btn');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          if (confirm('Remove all items from your cart?')) { WOGCart.clear(); render(); }
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', render);
+  })();
+  </script>
+
+</body>
+</html>

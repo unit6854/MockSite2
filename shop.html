@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Shop Warrior of God Tactical — Firearms, ammunition, optics, magazines, holsters, hunting gear & apparel." />
+  <meta name="theme-color" content="#0d0d0d" />
+  <title>Shop — Warrior of God Tactical</title>
+  <script>(function(){var ok=document.cookie.split(';').some(function(c){return c.trim().indexOf('wog_age_verified=')===0;});if(!ok){try{ok=localStorage.getItem('wog_age_verified')==='yes';}catch(e){}}if(ok)document.documentElement.classList.add('age-verified');})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <style>
+    /* ── Shop-page-specific overrides ─────────────────────────────────────── */
+    .shop-hero {
+      background: linear-gradient(135deg, #0d0d0d 0%, #0f1923 100%);
+      padding: 5rem 0 3rem;
+      border-bottom: 1px solid rgba(14,165,233,.15);
+    }
+    .shop-hero__inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .shop-hero__title { font-family:var(--wp--preset--font-family--display,Oswald,sans-serif); font-size:clamp(1.75rem,4vw,2.75rem); font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#fff; margin:0; }
+    .shop-hero__title em { color:var(--wp--preset--color--primary,#0ea5e9); font-style:normal; }
+    .shop-hero__breadcrumb { font-size:.8rem; color:rgba(255,255,255,.45); margin:0 0 .5rem; }
+    .shop-hero__breadcrumb a { color:rgba(255,255,255,.6); text-decoration:none; }
+    .shop-hero__breadcrumb a:hover { color:var(--wp--preset--color--primary,#0ea5e9); }
+
+    .shop-controls {
+      background:#111820;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      position: sticky;
+      top: 64px;
+      z-index: 90;
+    }
+    .shop-controls__inner { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .shop-tab-list { display:flex; gap:.4rem; flex-wrap:wrap; flex:1; }
+    .shop-tab-btn {
+      background:transparent;
+      border:1px solid rgba(255,255,255,.1);
+      color:rgba(255,255,255,.6);
+      font-family:var(--wp--preset--font-family--display,Oswald,sans-serif);
+      font-size:.8rem;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      padding:.4rem .85rem;
+      border-radius:2px;
+      cursor:pointer;
+      transition:all .18s ease;
+      white-space:nowrap;
+    }
+    .shop-tab-btn:hover { border-color:var(--wp--preset--color--primary,#0ea5e9); color:#fff; }
+    .shop-tab-btn.active {
+      background:var(--wp--preset--color--primary,#0ea5e9);
+      border-color:var(--wp--preset--color--primary,#0ea5e9);
+      color:#fff;
+    }
+    .shop-sort {
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+    }
+    .shop-sort label { font-size:.75rem; color:rgba(255,255,255,.45); white-space:nowrap; }
+    .shop-sort select {
+      background:#0d0d0d;
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.8);
+      font-size:.8rem;
+      padding:.35rem .6rem;
+      border-radius:2px;
+      cursor:pointer;
+    }
+    .shop-sort select:focus { outline:none; border-color:var(--wp--preset--color--primary,#0ea5e9); }
+
+    .shop-results-info {
+      padding:1.25rem 0 .5rem;
+      font-size:.8rem;
+      color:rgba(255,255,255,.4);
+    }
+
+    .shop-section { padding:0 0 4rem; background:var(--wp--preset--color--dark,#0d0d0d); min-height:60vh; }
+
+    /* Product card overrides for shop page */
+    .shop-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+      gap:1.25rem;
+      padding:1rem 0 2rem;
+    }
+
+    .shop-card {
+      background:#111820;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:4px;
+      overflow:hidden;
+      transition:transform .2s ease, border-color .2s ease;
+      display:flex;
+      flex-direction:column;
+    }
+    .shop-card:hover { transform:translateY(-3px); border-color:rgba(14,165,233,.3); }
+    .shop-card__img-wrap {
+      position:relative;
+      aspect-ratio:350/250;
+      overflow:hidden;
+      background:#fff;
+    }
+    .shop-card__img { width:100%; height:100%; object-fit:contain; transition:transform .3s ease; display:block; background:#fff; }
+    .shop-card:hover .shop-card__img { transform:scale(1.04); }
+    .shop-card__badge {
+      position:absolute;
+      top:.5rem;
+      left:.5rem;
+      background:var(--wp--preset--color--primary,#0ea5e9);
+      color:#fff;
+      font-family:Oswald,sans-serif;
+      font-size:.65rem;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      padding:.2rem .5rem;
+      border-radius:2px;
+    }
+    .shop-card__badge--sale { background:#e11d48; }
+    .shop-card__badge--hot  { background:#f97316; }
+    .shop-card__badge--new  { background:#10b981; }
+    .shop-card__body { padding:.85rem; flex:1; display:flex; flex-direction:column; gap:.35rem; }
+    .shop-card__brand { font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; color:var(--wp--preset--color--primary,#0ea5e9); margin:0; }
+    .shop-card__name { font-family:Oswald,sans-serif; font-size:1rem; font-weight:500; color:#fff; margin:0; line-height:1.25; }
+    .shop-card__price-row { display:flex; align-items:baseline; gap:.45rem; margin-top:auto; padding-top:.5rem; }
+    .shop-card__price { font-family:Oswald,sans-serif; font-size:1.1rem; font-weight:600; color:#fff; }
+    .shop-card__original { font-size:.8rem; color:rgba(255,255,255,.35); text-decoration:line-through; }
+    .shop-card__footer { padding:.5rem .85rem .85rem; display:flex; gap:.5rem; }
+    .shop-card__cta {
+      flex:1;
+      background:var(--wp--preset--color--primary,#0ea5e9);
+      color:#fff;
+      border:none;
+      font-family:Oswald,sans-serif;
+      font-size:.8rem;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      padding:.55rem .75rem;
+      border-radius:2px;
+      cursor:pointer;
+      text-align:center;
+      text-decoration:none;
+      transition:background .18s ease;
+      display:block;
+    }
+    .shop-card__cta:hover { background:#0284c7; }
+
+    /* Pagination */
+    .pagination {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.4rem;
+      padding:2rem 0 1rem;
+      flex-wrap:wrap;
+    }
+    .pagination__btn {
+      background:transparent;
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.6);
+      font-family:Oswald,sans-serif;
+      font-size:.8rem;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      min-width:2.5rem;
+      padding:.45rem .6rem;
+      border-radius:2px;
+      cursor:pointer;
+      transition:all .15s ease;
+    }
+    .pagination__btn:hover:not(:disabled) { border-color:var(--wp--preset--color--primary,#0ea5e9); color:#fff; }
+    .pagination__btn.active { background:var(--wp--preset--color--primary,#0ea5e9); border-color:var(--wp--preset--color--primary,#0ea5e9); color:#fff; }
+    .pagination__btn:disabled { opacity:.25; cursor:default; }
+    .pagination__ellipsis { color:rgba(255,255,255,.25); font-size:.8rem; padding:0 .25rem; }
+
+    .shop-empty {
+      text-align:center;
+      padding:5rem 1rem;
+      color:rgba(255,255,255,.35);
+    }
+    .shop-empty h3 { font-family:Oswald,sans-serif; font-size:1.5rem; color:rgba(255,255,255,.5); margin:0 0 .5rem; }
+
+    /* ── Prominent search bar ─────────────────────────────────────────────── */
+    .shop-search-bar {
+      background: #0f1923;
+      border-bottom: 1px solid rgba(14,165,233,.12);
+      padding: 1.25rem 0;
+    }
+    .shop-search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .shop-search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(14,165,233,.7);
+      pointer-events: none;
+      display: flex;
+    }
+    .shop-search-input {
+      flex: 1;
+      background: rgba(255,255,255,.05);
+      border: 1.5px solid rgba(14,165,233,.25);
+      color: #fff;
+      font-family: Inter, sans-serif;
+      font-size: 1rem;
+      padding: .8rem 1rem .8rem 3rem;
+      border-radius: 3px;
+      transition: border-color .18s, background .18s, box-shadow .18s;
+      outline: none;
+      width: 100%;
+    }
+    .shop-search-input::placeholder { color: rgba(255,255,255,.3); }
+    .shop-search-input:focus {
+      border-color: var(--wp--preset--color--primary,#0ea5e9);
+      background: rgba(14,165,233,.07);
+      box-shadow: 0 0 0 3px rgba(14,165,233,.12);
+    }
+    .shop-search-clear {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255,255,255,.35);
+      cursor: pointer;
+      padding: .25rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color .15s, background .15s;
+    }
+    .shop-search-clear:hover { color: #fff; background: rgba(255,255,255,.1); }
+    .shop-search-clear[hidden] { display: none !important; }
+    .shop-search-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-top: .65rem;
+    }
+    .shop-search-chip-label {
+      font-size: .7rem;
+      color: rgba(255,255,255,.3);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      align-self: center;
+      white-space: nowrap;
+    }
+    .shop-search-chip {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.1);
+      color: rgba(255,255,255,.5);
+      font-size: .75rem;
+      font-family: Inter, sans-serif;
+      padding: .25rem .65rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .15s ease;
+      white-space: nowrap;
+    }
+    .shop-search-chip:hover {
+      border-color: var(--wp--preset--color--primary,#0ea5e9);
+      color: #fff;
+      background: rgba(14,165,233,.1);
+    }
+
+    @media (max-width:640px) {
+      .shop-controls__inner { flex-direction:column; align-items:flex-start; }
+      .shop-sort { width:100%; }
+      .shop-sort select { flex:1; }
+    }
+  </style>
+</head>
+<body class="page--inner">
+
+  <!-- AGE GATE -->
+  <div id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-heading">
+    <div class="age-gate__overlay"></div>
+    <div class="age-gate__card">
+      <div class="age-gate__emblem">
+        <img src="assets/images/logo.png" alt="Warrior of God Tactical" class="age-gate__logo" onerror="this.style.display='none'" />
+        <div class="age-gate__cross" aria-hidden="true"></div>
+      </div>
+      <p class="age-gate__eyebrow">Entry Restriction</p>
+      <h2 id="age-gate-heading" class="age-gate__heading">Age Verification Required</h2>
+      <p class="age-gate__body">
+        You must be <strong>18 years of age or older</strong> to enter this website.
+        This site contains products and content related to firearms and tactical equipment
+        regulated by federal and state law.
+      </p>
+      <div class="age-gate__actions">
+        <button id="age-gate-confirm" class="btn btn--primary btn--lg">I Am 18 or Older — Enter Site</button>
+        <button id="age-gate-deny" class="btn btn--ghost btn--sm">I Am Under 18 — Exit</button>
+      </div>
+      <p class="age-gate__legal">
+        By entering, you confirm you are of legal age and agree to our
+        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+
+  <div id="site-wrapper" class="site-wrapper" hidden>
+
+    <!-- HEADER -->
+    <header id="site-header" class="site-header" role="banner">
+      <div class="container site-header__inner">
+        <a href="index.html" class="site-header__logo" aria-label="Warrior of God Tactical — Home">
+          <span class="nav-shield-glow">
+            <svg class="nav-shield-logo" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z"
+                    fill="rgba(14,165,233,0.07)" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M20 7 L32 12 L32 26 C32 34 20 43 20 43 C20 43 8 34 8 26 L8 12 Z"
+                    fill="none" stroke="#0ea5e9" stroke-width="0.8" stroke-linejoin="round" opacity="0.4"/>
+              <line x1="20" y1="13" x2="20" y2="38" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <line x1="11" y1="22" x2="29" y2="22" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="20" cy="22" r="2" fill="#0ea5e9" opacity="0.9"/>
+            </svg>
+          </span>
+          <span class="logo-text">WOG<em>Tactical</em></span>
+        </a>
+
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary Navigation">
+          <ul class="primary-nav__list" role="list">
+            <li><a href="index.html"          class="primary-nav__link">Home</a></li>
+            <li class="has-dropdown">
+              <a href="shop.html" class="primary-nav__link" aria-haspopup="true" aria-expanded="false">
+                Shop <span class="nav-arrow" aria-hidden="true">&#x25BE;</span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li role="none"><a href="shop.html?tab=firearms"  role="menuitem">Firearms</a></li>
+                <li role="none"><a href="shop.html?tab=ammo"      role="menuitem">Ammunition</a></li>
+                <li role="none"><a href="shop.html?tab=magazines" role="menuitem">Magazines</a></li>
+                <li role="none"><a href="shop.html?tab=optics"    role="menuitem">Optics</a></li>
+                <li role="none"><a href="shop.html?tab=gear"      role="menuitem">Holsters &amp; Gear</a></li>
+                <li role="none"><a href="shop.html?tab=hunting"   role="menuitem">Hunting &amp; Camping</a></li>
+                <li role="none"><a href="shop.html?tab=apparel"   role="menuitem">Apparel</a></li>
+                <li role="none"><a href="manufacturers.html"      role="menuitem">Shop Manufacturers</a></li>
+              </ul>
+            </li>
+            <li><a href="index.html#deals"   class="primary-nav__link">Deals</a></li>
+            <li><a href="index.html#about"   class="primary-nav__link">About Us</a></li>
+            <li><a href="index.html#contact" class="primary-nav__link">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="site-header__actions">
+          <button class="icon-btn search-toggle" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </button>
+          <a href="cart.html" class="icon-btn cart-btn" aria-label="Shopping Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <span class="cart-count" aria-label="0 items">0</span>
+          </a>
+          <button class="mobile-menu-toggle" aria-label="Open Menu" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+
+      <div id="search-panel" class="search-panel" hidden>
+        <div class="container">
+          <form class="search-form" role="search" id="shop-search-form">
+            <input type="search" id="shop-search-input" placeholder="Search firearms, ammo, gear..." aria-label="Search products" />
+            <button type="submit" aria-label="Submit Search">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" role="main">
+
+      <!-- PAGE TITLE -->
+      <div class="shop-hero">
+        <div class="container shop-hero__inner">
+          <div>
+            <p class="shop-hero__breadcrumb"><a href="index.html">Home</a> / <span id="breadcrumb-cat">Shop</span></p>
+            <h1 class="shop-hero__title">Shop <em id="page-title-cat">All Products</em></h1>
+          </div>
+          <p style="color:rgba(255,255,255,.4);font-size:.85rem;margin:0;" id="result-count-hero"></p>
+        </div>
+      </div>
+
+      <!-- STICKY CONTROLS -->
+      <div class="shop-controls">
+        <div class="container shop-controls__inner">
+          <div class="shop-tab-list" role="tablist" id="category-tabs" aria-label="Product categories"></div>
+          <div class="shop-sort">
+            <label for="sort-select">Sort:</label>
+            <select id="sort-select" aria-label="Sort products">
+              <option value="default">Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name-asc">Name: A–Z</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMINENT SEARCH BAR -->
+      <div class="shop-search-bar">
+        <div class="container">
+          <div class="shop-search-wrap" role="search">
+            <span class="shop-search-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+            </span>
+            <input type="search"
+                   id="main-search-input"
+                   class="shop-search-input"
+                   placeholder="Search by brand, caliber, product name..."
+                   aria-label="Search products"
+                   autocomplete="off"
+                   spellcheck="false" />
+            <button id="main-search-clear" class="shop-search-clear" aria-label="Clear search" hidden>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+          <div class="shop-search-chips" id="search-chips" aria-label="Quick search filters">
+            <span class="shop-search-chip-label">Try:</span>
+            <button class="shop-search-chip" data-query="9mm">9mm</button>
+            <button class="shop-search-chip" data-query="Glock">Glock</button>
+            <button class="shop-search-chip" data-query="AR-15">AR-15</button>
+            <button class="shop-search-chip" data-query="defense">Defense</button>
+            <button class="shop-search-chip" data-query="sale">On Sale</button>
+            <button class="shop-search-chip" data-query="Hornady">Hornady</button>
+            <button class="shop-search-chip" data-query="Magpul">Magpul</button>
+            <button class="shop-search-chip" data-query=".22">&#46;22 LR</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT GRID + PAGINATION -->
+      <section class="shop-section">
+        <div class="container">
+          <p class="shop-results-info" id="results-info" aria-live="polite"></p>
+          <div class="shop-grid" id="shop-grid" role="list" aria-live="polite"></div>
+          <div class="pagination" id="pagination" aria-label="Page navigation"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="site-footer" class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a href="index.html" class="footer-brand__logo" aria-label="Warrior of God Tactical">
+              <svg class="footer-shield-svg" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z" fill="rgba(14,165,233,0.09)" stroke="#0ea5e9" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M20 6 L34 12 L34 27 C34 36 20 45 20 45 C20 45 6 36 6 27 L6 12 Z" fill="none" stroke="#0ea5e9" stroke-width="0.7" stroke-linejoin="round" opacity="0.35"/>
+                <line x1="20" y1="13" x2="20" y2="39" stroke="#0ea5e9" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="10" y1="22" x2="30" y2="22" stroke="#0ea5e9" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="20" cy="22" r="2.5" fill="#0ea5e9" opacity="0.95"/>
+                <circle cx="20" cy="22" r="5" fill="none" stroke="#0ea5e9" stroke-width="0.6" opacity="0.4"/>
+              </svg>
+            </a>
+            <p class="footer-brand__tagline">Equipped for Every Battle.</p>
+            <div class="footer-social">
+              <a href="#" class="footer-social__link" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+              <a href="#" class="footer-social__link" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+              <a href="#" class="footer-social__link" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="#0d0d0d" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <nav class="footer-nav" aria-label="Footer Navigation">
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Quick Links</h3>
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop All</a></li>
+                <li><a href="index.html#deals">Deals</a></li>
+                <li><a href="index.html#about">About Us</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Categories</h3>
+              <ul>
+                <li><a href="shop.html?tab=firearms">Firearms</a></li>
+                <li><a href="shop.html?tab=ammo">Ammunition</a></li>
+                <li><a href="shop.html?tab=magazines">Magazines</a></li>
+                <li><a href="shop.html?tab=optics">Optics</a></li>
+                <li><a href="shop.html?tab=gear">Holsters &amp; Gear</a></li>
+                <li><a href="shop.html?tab=hunting">Hunting &amp; Camping</a></li>
+                <li><a href="shop.html?tab=apparel">Apparel</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Support</h3>
+              <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Shipping Policy</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">FFL Transfer Info</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+
+        <div class="footer-legal">
+          <p class="footer-legal__compliance">
+            All firearms sales comply with federal and state law.
+            FFL transfers required for shipped firearms.
+            Must be 18+ for long guns, 21+ for handguns.
+          </p>
+          <p class="footer-legal__copyright">
+            &copy; <span id="footer-year"></span> Warrior of God Tactical. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /#site-wrapper -->
+
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/products.js" defer></script>
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── Age Gate ──────────────────────────────────────────────────────────── */
+    // Head script already set html.age-verified if cookie exists.
+    // CSS handles hiding gate + showing site-wrapper. Just bind buttons for first visit.
+    const siteWrapper = document.getElementById('site-wrapper');
+    if (document.documentElement.classList.contains('age-verified')) {
+      const g = document.getElementById('age-gate');
+      if (g) g.remove();
+      if (siteWrapper) siteWrapper.removeAttribute('hidden');
+    } else {
+      document.body.style.overflow = 'hidden';
+      document.getElementById('age-gate-confirm').addEventListener('click', function() {
+        const exp = new Date(Date.now() + 7 * 864e5).toUTCString();
+        document.cookie = 'wog_age_verified=yes;expires=' + exp + ';path=/;SameSite=Lax';
+        try { localStorage.setItem('wog_age_verified', 'yes'); } catch(e) {}
+        document.documentElement.classList.add('age-verified');
+        document.body.style.overflow = '';
+        if (siteWrapper) siteWrapper.removeAttribute('hidden');
+        const g = document.getElementById('age-gate');
+        if (g) { g.classList.add('hidden'); setTimeout(function(){ g.remove(); }, 400); }
+      });
+      document.getElementById('age-gate-deny').addEventListener('click', function() {
+        window.location.href = 'https://www.google.com';
+      });
+    }
+
+    /* ── Nav mobile toggle ────────────────────────────────────────────────── */
+    const mobileBtn = document.querySelector('.mobile-menu-toggle');
+    const nav = document.getElementById('primary-nav');
+    if (mobileBtn && nav) {
+      mobileBtn.addEventListener('click', () => {
+        const open = nav.classList.toggle('nav--open');
+        mobileBtn.setAttribute('aria-expanded', open);
+        mobileBtn.setAttribute('aria-label', open ? 'Close Menu' : 'Open Menu');
+      });
+    }
+
+    /* ── Header search toggle (nav icon) ────────────────────────────────── */
+    const searchToggle = document.querySelector('.search-toggle');
+    const searchPanel  = document.getElementById('search-panel');
+    if (searchToggle && searchPanel) {
+      searchToggle.addEventListener('click', () => {
+        searchPanel.hidden = !searchPanel.hidden;
+        if (!searchPanel.hidden) {
+          const mainInp = document.getElementById('main-search-input');
+          if (mainInp) { mainInp.focus(); searchPanel.hidden = true; }
+        }
+      });
+    }
+
+    /* ── Footer year ─────────────────────────────────────────────────────── */
+    const fy = document.getElementById('footer-year');
+    if (fy) fy.textContent = new Date().getFullYear();
+
+    /* ── Header scroll — always solid on inner pages ──────────────────────── */
+    const header = document.getElementById('site-header');
+    if (header) {
+      header.classList.add('scrolled');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) header.classList.add('scrolled');
+      }, { passive: true });
+    }
+
+    /* ── Wait for products.js then boot ──────────────────────────────────── */
+    function waitForProducts(cb) {
+      if (typeof WOG_PRODUCTS !== 'undefined') { cb(); return; }
+      document.addEventListener('DOMContentLoaded', () => {
+        if (typeof WOG_PRODUCTS !== 'undefined') { cb(); return; }
+        const t = setInterval(() => {
+          if (typeof WOG_PRODUCTS !== 'undefined') { clearInterval(t); cb(); }
+        }, 50);
+      });
+    }
+
+    /* ── Shop logic ───────────────────────────────────────────────────────── */
+    const PER_PAGE = 24;
+    let currentTab   = 'all';
+    let currentSort  = 'default';
+    let currentPage  = 1;
+    let currentQuery = '';
+
+    waitForProducts(init);
+
+    function init() {
+      buildTabs();
+      readUrlParams();
+      bindMainSearch();
+      render();
+    }
+
+    function bindMainSearch() {
+      const inp   = document.getElementById('main-search-input');
+      const clear = document.getElementById('main-search-clear');
+      if (!inp) return;
+
+      inp.addEventListener('input', () => {
+        currentQuery = inp.value.trim().toLowerCase();
+        currentPage  = 1;
+        if (clear) clear.hidden = !inp.value.length;
+        render();
+      });
+
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { inp.value = ''; currentQuery = ''; currentPage = 1; if (clear) clear.hidden = true; render(); }
+      });
+
+      if (clear) {
+        clear.addEventListener('click', () => {
+          inp.value = ''; currentQuery = ''; currentPage = 1;
+          clear.hidden = true;
+          render();
+          inp.focus();
+        });
+      }
+
+      document.querySelectorAll('.shop-search-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const q = chip.dataset.query || '';
+          inp.value = q;
+          currentQuery = q.toLowerCase();
+          currentPage  = 1;
+          if (clear) clear.hidden = !q.length;
+          render();
+          inp.focus();
+        });
+      });
+    }
+
+    function buildTabs() {
+      const container = document.getElementById('category-tabs');
+      if (!container || typeof WOG_CATEGORIES === 'undefined') return;
+      WOG_CATEGORIES.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'shop-tab-btn' + (cat.id === currentTab ? ' active' : '');
+        btn.textContent = cat.label;
+        btn.dataset.tab = cat.id;
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', cat.id === currentTab ? 'true' : 'false');
+        btn.addEventListener('click', () => {
+          currentTab  = cat.id;
+          currentPage = 1;
+          updateTabUI();
+          updateHeaderText();
+          render();
+          history.replaceState(null, '', '?tab=' + cat.id);
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    function updateTabUI() {
+      document.querySelectorAll('.shop-tab-btn').forEach(btn => {
+        const active = btn.dataset.tab === currentTab;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+
+    function updateHeaderText() {
+      const cat = typeof WOG_CATEGORIES !== 'undefined'
+        ? WOG_CATEGORIES.find(c => c.id === currentTab)
+        : null;
+      const label = cat ? cat.label : 'All Products';
+      const titleEl = document.getElementById('page-title-cat');
+      const breadEl = document.getElementById('breadcrumb-cat');
+      if (titleEl) titleEl.textContent = label;
+      if (breadEl) breadEl.textContent = currentTab === 'all' ? 'Shop' : label;
+    }
+
+    function readUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const tab    = params.get('tab');
+      const q      = params.get('q');
+      if (tab && typeof WOG_CATEGORIES !== 'undefined' && WOG_CATEGORIES.some(c => c.id === tab)) {
+        currentTab = tab;
+        updateTabUI();
+        updateHeaderText();
+      }
+      if (q) {
+        currentQuery = q.toLowerCase();
+        const inp   = document.getElementById('main-search-input');
+        const clear = document.getElementById('main-search-clear');
+        if (inp)   inp.value = q;
+        if (clear) clear.hidden = false;
+      }
+    }
+
+    function getFiltered() {
+      if (typeof WOG_PRODUCTS === 'undefined') return [];
+      let list = WOG_PRODUCTS.slice();
+
+      if (currentTab !== 'all') {
+        list = list.filter(p => p.tab === currentTab);
+      }
+      if (currentQuery) {
+        const q = currentQuery;
+        list = list.filter(p =>
+          p.name.toLowerCase().includes(q) ||
+          p.brand.toLowerCase().includes(q) ||
+          (p.category || '').toLowerCase().includes(q) ||
+          (p.description || '').toLowerCase().includes(q)
+        );
+      }
+      switch (currentSort) {
+        case 'price-asc':  list.sort((a,b) => a.price - b.price); break;
+        case 'price-desc': list.sort((a,b) => b.price - a.price); break;
+        case 'name-asc':   list.sort((a,b) => a.name.localeCompare(b.name)); break;
+        default: list.sort((a,b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)); break;
+      }
+      return list;
+    }
+
+    function render() {
+      const filtered = getFiltered();
+      const total    = filtered.length;
+      const pages    = Math.max(1, Math.ceil(total / PER_PAGE));
+      currentPage    = Math.min(currentPage, pages);
+      const start    = (currentPage - 1) * PER_PAGE;
+      const slice    = filtered.slice(start, start + PER_PAGE);
+
+      renderInfo(total, start, slice.length);
+      renderGrid(slice);
+      renderPagination(pages);
+      document.getElementById('result-count-hero').textContent =
+        total + ' product' + (total !== 1 ? 's' : '');
+    }
+
+    function renderInfo(total, start, count) {
+      const el = document.getElementById('results-info');
+      if (!el) return;
+      if (total === 0) { el.textContent = ''; return; }
+      el.textContent = 'Showing ' + (start + 1) + '–' + (start + count) + ' of ' + total + ' products';
+    }
+
+    function renderGrid(products) {
+      const grid = document.getElementById('shop-grid');
+      if (!grid) return;
+
+      if (products.length === 0) {
+        grid.innerHTML = '<div class="shop-empty"><h3>No products found</h3><p>Try a different category or clear your search.</p></div>';
+        return;
+      }
+
+      grid.innerHTML = products.map(p => {
+        const badgeClass = p.badge
+          ? ' shop-card__badge--' + (p.badge.toLowerCase() === 'sale' ? 'sale' : p.badge.toLowerCase().includes('hot') ? 'hot' : p.badge.toLowerCase() === 'new' ? 'new' : '')
+          : '';
+        const originalHTML = p.originalPrice
+          ? `<span class="shop-card__original">$${p.originalPrice.toFixed(2)}</span>`
+          : '';
+        return `<article class="shop-card" role="listitem">
+          <a href="product.html?id=${encodeURIComponent(p.id)}" class="shop-card__img-wrap" aria-label="${escHtml(p.name)}">
+            <img src="${escHtml(p.image)}" alt="${escHtml(p.name)}" class="shop-card__img" loading="lazy" width="350" height="250"
+                 onerror="this.src='https://placehold.co/350x250/0f1923/0ea5e9?text=${encodeURIComponent(p.name)}&font=oswald'" />
+            ${p.badge ? `<span class="shop-card__badge${badgeClass}">${escHtml(p.badge)}</span>` : ''}
+          </a>
+          <div class="shop-card__body">
+            <p class="shop-card__brand">${escHtml(p.brand)}</p>
+            <h2 class="shop-card__name">${escHtml(p.name)}</h2>
+            <div class="shop-card__price-row">
+              <span class="shop-card__price">$${p.price.toFixed(2)}</span>
+              ${originalHTML}
+            </div>
+          </div>
+          <div class="shop-card__footer">
+            <a href="product.html?id=${encodeURIComponent(p.id)}" class="shop-card__cta">View Details</a>
+          </div>
+        </article>`;
+      }).join('');
+    }
+
+    function renderPagination(pages) {
+      const el = document.getElementById('pagination');
+      if (!el) return;
+      if (pages <= 1) { el.innerHTML = ''; return; }
+
+      let html = '';
+      html += `<button class="pagination__btn" id="pg-prev" aria-label="Previous page" ${currentPage <= 1 ? 'disabled' : ''}>&#8592; Prev</button>`;
+
+      const range = pageRange(currentPage, pages);
+      let prev = null;
+      range.forEach(n => {
+        if (prev !== null && n - prev > 1) {
+          html += `<span class="pagination__ellipsis">&hellip;</span>`;
+        }
+        html += `<button class="pagination__btn${n === currentPage ? ' active' : ''}" data-page="${n}" aria-label="Page ${n}" aria-current="${n === currentPage ? 'page' : 'false'}">${n}</button>`;
+        prev = n;
+      });
+
+      html += `<button class="pagination__btn" id="pg-next" aria-label="Next page" ${currentPage >= pages ? 'disabled' : ''}>Next &#8594;</button>`;
+      el.innerHTML = html;
+
+      el.querySelectorAll('[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => { currentPage = parseInt(btn.dataset.page, 10); render(); scrollToGrid(); });
+      });
+      const prev_btn = document.getElementById('pg-prev');
+      const next_btn = document.getElementById('pg-next');
+      if (prev_btn) prev_btn.addEventListener('click', () => { currentPage--; render(); scrollToGrid(); });
+      if (next_btn) next_btn.addEventListener('click', () => { currentPage++; render(); scrollToGrid(); });
+    }
+
+    function pageRange(current, total) {
+      const delta = 2;
+      const range = new Set([1, total]);
+      for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) range.add(i);
+      return Array.from(range).sort((a, b) => a - b);
+    }
+
+    function scrollToGrid() {
+      const grid = document.getElementById('shop-grid');
+      if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function escHtml(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    /* ── Sort dropdown ───────────────────────────────────────────────────── */
+    const sortSelect = document.getElementById('sort-select');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        currentSort = sortSelect.value;
+        currentPage = 1;
+        render();
+      });
+    }
+
+  }());
+  </script>
+
+</body>
+</html>

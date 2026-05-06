@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Shop by manufacturer — Warrior of God Tactical carries products from SIG Sauer, Glock, Ruger, Smith &amp; Wesson, Springfield Armory, and more." />
+  <title>Shop Manufacturers — Warrior of God Tactical</title>
+  <script>(function(){var ok=document.cookie.split(';').some(function(c){return c.trim().indexOf('wog_age_verified=')===0;});if(!ok){try{ok=localStorage.getItem('wog_age_verified')==='yes';}catch(e){}}if(ok)document.documentElement.classList.add('age-verified');})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <style>
+    /* ── Page hero ─────────────────────────────────────────────────────────── */
+    .mfr-hero {
+      background: linear-gradient(135deg, #0d0d0d 0%, #0f1923 100%);
+      padding: calc(72px + 2.5rem) 0 3rem;
+      border-bottom: 1px solid rgba(14,165,233,.12);
+      text-align: center;
+    }
+    .mfr-hero__eyebrow {
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+      color: rgba(14,165,233,.8);
+      margin: 0 0 .6rem;
+    }
+    .mfr-hero__heading {
+      font-family: Oswald, sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 .75rem;
+      text-shadow: 0 0 32px rgba(14,165,233,.25);
+    }
+    .mfr-hero__sub {
+      color: rgba(255,255,255,.55);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── Section ───────────────────────────────────────────────────────────── */
+    .mfr-section {
+      padding: 4rem 0 5rem;
+      background-image: radial-gradient(circle, rgba(14,165,233,.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* ── Manufacturer grid ─────────────────────────────────────────────────── */
+    .mfr-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 1024px) { .mfr-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 580px)  { .mfr-grid { grid-template-columns: 1fr; } }
+
+    /* ── Manufacturer card ─────────────────────────────────────────────────── */
+    .mfr-card {
+      background: #0b1320;
+      border: 1px solid rgba(14,165,233,.12);
+      border-radius: 4px;
+      padding: 2rem 1.5rem 1.75rem;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      transition: border-color .3s, box-shadow .3s, transform .3s;
+      position: relative;
+    }
+    .mfr-card::before, .mfr-card::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-color: rgba(14,165,233,0);
+      border-style: solid;
+      transition: border-color .3s;
+      pointer-events: none;
+    }
+    .mfr-card::before { top: 6px;    left: 6px;  border-width: 1.5px 0 0 1.5px; }
+    .mfr-card::after  { bottom: 6px; right: 6px; border-width: 0 1.5px 1.5px 0; }
+    .mfr-card:hover {
+      border-color: rgba(14,165,233,.45);
+      box-shadow: 0 0 28px rgba(14,165,233,.14), 0 4px 20px rgba(0,0,0,.4);
+      transform: translateY(-3px);
+    }
+    .mfr-card:hover::before,
+    .mfr-card:hover::after { border-color: rgba(14,165,233,.5); }
+
+    .mfr-card__logo-wrap {
+      background: rgba(255,255,255,.93);
+      border-radius: 3px;
+      width: 100%;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+    }
+    .mfr-card__logo {
+      max-height: 60px;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .mfr-card__logo-fallback {
+      font-family: Oswald, sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #0f1923;
+      letter-spacing: .06em;
+    }
+
+    .mfr-card__name {
+      font-family: Oswald, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.9);
+      letter-spacing: .05em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+    .mfr-card__tagline {
+      font-size: .78rem;
+      color: rgba(255,255,255,.38);
+      margin: -.75rem 0 0;
+      font-style: italic;
+    }
+    .mfr-card__btn {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid rgba(14,165,233,.5);
+      color: #0ea5e9;
+      font-family: Oswald, sans-serif;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .5rem 1.25rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background .2s, color .2s, box-shadow .2s;
+      margin-top: auto;
+    }
+    .mfr-card:hover .mfr-card__btn {
+      background: rgba(14,165,233,.12);
+      box-shadow: 0 0 12px rgba(14,165,233,.3);
+    }
+
+    /* ── Trust note ────────────────────────────────────────────────────────── */
+    .mfr-trust {
+      text-align: center;
+      margin-top: 3.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(14,165,233,.1);
+    }
+    .mfr-trust p {
+      color: rgba(255,255,255,.38);
+      font-size: .82rem;
+      letter-spacing: .04em;
+    }
+  </style>
+</head>
+<body class="page--inner">
+
+  <!-- AGE GATE -->
+  <div id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-heading">
+    <div class="age-gate__overlay"></div>
+    <div class="age-gate__card">
+      <div class="age-gate__emblem">
+        <img src="assets/images/logo.png" alt="Warrior of God Tactical" class="age-gate__logo" onerror="this.style.display='none'" />
+        <div class="age-gate__cross" aria-hidden="true"></div>
+      </div>
+      <p class="age-gate__eyebrow">Entry Restriction</p>
+      <h2 id="age-gate-heading" class="age-gate__heading">Age Verification Required</h2>
+      <p class="age-gate__body">You must be <strong>18 years of age or older</strong> to enter this website. This site contains products and content related to firearms and tactical equipment regulated by federal and state law.</p>
+      <div class="age-gate__actions">
+        <button id="age-gate-confirm" class="btn btn--primary btn--lg">I Am 18 or Older — Enter Site</button>
+        <button id="age-gate-deny" class="btn btn--ghost btn--sm">I Am Under 18 — Exit</button>
+      </div>
+      <p class="age-gate__legal">By entering, you confirm you are of legal age and agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+    </div>
+  </div>
+
+  <div id="site-wrapper" class="site-wrapper" hidden>
+
+    <!-- HEADER -->
+    <header id="site-header" class="site-header" role="banner">
+      <div class="container site-header__inner">
+        <a href="index.html" class="site-header__logo" aria-label="Warrior of God Tactical — Home">
+          <span class="nav-shield-glow">
+            <svg class="nav-shield-logo" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z"
+                    fill="rgba(14,165,233,0.07)" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M20 7 L32 12 L32 26 C32 34 20 43 20 43 C20 43 8 34 8 26 L8 12 Z"
+                    fill="none" stroke="#0ea5e9" stroke-width="0.8" stroke-linejoin="round" opacity="0.4"/>
+              <line x1="20" y1="13" x2="20" y2="38" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <line x1="11" y1="22" x2="29" y2="22" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="20" cy="22" r="2" fill="#0ea5e9" opacity="0.9"/>
+            </svg>
+          </span>
+          <span class="logo-text">WOG<em>Tactical</em></span>
+        </a>
+
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary Navigation">
+          <ul class="primary-nav__list" role="list">
+            <li><a href="index.html" class="primary-nav__link">Home</a></li>
+            <li class="has-dropdown">
+              <a href="shop.html" class="primary-nav__link" aria-haspopup="true" aria-expanded="false">
+                Shop <span class="nav-arrow" aria-hidden="true">&#x25BE;</span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li role="none"><a href="shop.html?tab=firearms"  role="menuitem">Firearms</a></li>
+                <li role="none"><a href="shop.html?tab=ammo"      role="menuitem">Ammunition</a></li>
+                <li role="none"><a href="shop.html?tab=magazines" role="menuitem">Magazines</a></li>
+                <li role="none"><a href="shop.html?tab=optics"    role="menuitem">Optics</a></li>
+                <li role="none"><a href="shop.html?tab=gear"      role="menuitem">Holsters &amp; Gear</a></li>
+                <li role="none"><a href="shop.html?tab=hunting"   role="menuitem">Hunting &amp; Camping</a></li>
+                <li role="none"><a href="shop.html?tab=apparel"   role="menuitem">Apparel</a></li>
+                <li role="none"><a href="manufacturers.html"      role="menuitem">Shop Manufacturers</a></li>
+              </ul>
+            </li>
+            <li><a href="index.html#deals"   class="primary-nav__link">Deals</a></li>
+            <li><a href="index.html#about"   class="primary-nav__link">About Us</a></li>
+            <li><a href="index.html#contact" class="primary-nav__link">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="site-header__actions">
+          <button class="icon-btn search-toggle" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </button>
+          <a href="cart.html" class="icon-btn cart-btn" aria-label="Shopping Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <span class="cart-count" aria-label="0 items">0</span>
+          </a>
+          <button class="mobile-menu-toggle" aria-label="Open Menu" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+
+      <div id="search-panel" class="search-panel" hidden>
+        <div class="container">
+          <form class="search-form" role="search" onsubmit="(function(e){e.preventDefault();var q=e.target.querySelector('input').value.trim();if(q)window.location.href='shop.html?q='+encodeURIComponent(q);})(event)">
+            <input type="search" placeholder="Search by brand, caliber, or product..." aria-label="Search products" />
+            <button type="submit" aria-label="Submit Search">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" role="main">
+
+      <!-- Page hero -->
+      <section class="mfr-hero" aria-label="Shop Manufacturers">
+        <div class="container">
+          <p class="mfr-hero__eyebrow">Authorized Dealer</p>
+          <h1 class="mfr-hero__heading">Shop Manufacturers</h1>
+          <p class="mfr-hero__sub">We carry products from the most trusted names in firearms, optics, and tactical gear. Browse by manufacturer to find what you need.</p>
+        </div>
+      </section>
+
+      <div class="wog-divider" aria-hidden="true">
+        <div class="wog-divider__line wog-divider__line--left"></div>
+        <div class="wog-divider__gem"></div>
+        <div class="wog-divider__line wog-divider__line--right"></div>
+      </div>
+
+      <!-- Manufacturers grid -->
+      <section class="mfr-section" aria-label="Manufacturer list">
+        <div class="container">
+          <div class="mfr-grid">
+
+            <!-- SIG Sauer -->
+            <div class="mfr-card">
+              <div class="mfr-card__logo-wrap">
+                <img class="mfr-card__logo"
+                     src="https://upload.wikimedia.org/wikipedia/commons/1/19/Sig_sauer_logo.svg"
+                     alt="SIG Sauer"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+                <span class="mfr-card__logo-fallback" style="display:none">SIG SAUER</span>
+              </div>
+              <p class="mfr-card__name">SIG Sauer</p>
+              <p class="mfr-card__tagline">Never Settle</p>
+              <a href="shop.html?q=SIG+Sauer" class="mfr-card__btn">Shop SIG Sauer</a>
+            </div>
+
+            <!-- Glock -->
+            <div class="mfr-card">
+              <div class="mfr-card__logo-wrap">
+                <img class="mfr-card__logo"
+                     src="https://upload.wikimedia.org/wikipedia/commons/8/87/Glock_Logo_2017.svg"
+                     alt="Glock"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+                <span class="mfr-card__logo-fallback" style="display:none">GLOCK</span>
+              </div>
+              <p class="mfr-card__name">Glock</p>
+              <p class="mfr-card__tagline">Perfection</p>
+              <a href="shop.html?q=Glock" class="mfr-card__btn">Shop Glock</a>
+            </div>
+
+            <!-- Ruger -->
+            <div class="mfr-card">
+              <div class="mfr-card__logo-wrap">
+                <img class="mfr-card__logo"
+                     src="https://cdn.worldvectorlogo.com/logos/ruger-2.svg"
+                     alt="Ruger"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+                <span class="mfr-card__logo-fallback" style="display:none">RUGER</span>
+              </div>
+              <p class="mfr-card__name">Ruger</p>
+              <p class="mfr-card__tagline">Reliable. Rugged.</p>
+              <a href="shop.html?q=Ruger" class="mfr-card__btn">Shop Ruger</a>
+            </div>
+
+            <!-- Smith & Wesson -->
+            <div class="mfr-card">
+              <div class="mfr-card__logo-wrap">
+                <img class="mfr-card__logo"
+                     src="https://upload.wikimedia.org/wikipedia/de/4/4d/Smith-%26-Wesson-Logo.svg"
+                     alt="Smith &amp; Wesson"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+                <span class="mfr-card__logo-fallback" style="display:none">SMITH &amp; WESSON</span>
+              </div>
+              <p class="mfr-card__name">Smith &amp; Wesson</p>
+              <p class="mfr-card__tagline">The Original</p>
+              <a href="shop.html?q=Smith+%26+Wesson" class="mfr-card__btn">Shop S&amp;W</a>
+            </div>
+
+            <!-- Springfield Armory -->
+            <div class="mfr-card">
+              <div class="mfr-card__logo-wrap">
+                <img class="mfr-card__logo"
+                     src="https://upload.wikimedia.org/wikipedia/commons/9/95/Springfield_Armory.svg"
+                     alt="Springfield Armory"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+                <span class="mfr-card__logo-fallback" style="display:none">SPRINGFIELD ARMORY</span>
+              </div>
+              <p class="mfr-card__name">Springfield Armory</p>
+              <p class="mfr-card__tagline">Iconic. Trusted.</p>
+              <a href="shop.html?q=Springfield" class="mfr-card__btn">Shop Springfield</a>
+            </div>
+
+            <!-- Rossi -->
+            <div class="mfr-card">
+              <div class="mfr-card__logo-wrap">
+                <img class="mfr-card__logo"
+                     src="https://upload.wikimedia.org/wikipedia/commons/a/af/Rossi_logo_as_in_1970.jpg"
+                     alt="Rossi"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+                <span class="mfr-card__logo-fallback" style="display:none">ROSSI</span>
+              </div>
+              <p class="mfr-card__name">Rossi</p>
+              <p class="mfr-card__tagline">Quality &amp; Value</p>
+              <a href="shop.html?q=Rossi" class="mfr-card__btn">Shop Rossi</a>
+            </div>
+
+            <!-- Taurus -->
+            <div class="mfr-card">
+              <div class="mfr-card__logo-wrap">
+                <img class="mfr-card__logo"
+                     src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Taurus_Logo.svg"
+                     alt="Taurus"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+                <span class="mfr-card__logo-fallback" style="display:none">TAURUS</span>
+              </div>
+              <p class="mfr-card__name">Taurus</p>
+              <p class="mfr-card__tagline">It's Your Duty to Be Ready</p>
+              <a href="shop.html?q=Taurus" class="mfr-card__btn">Shop Taurus</a>
+            </div>
+
+            <!-- Walther -->
+            <div class="mfr-card">
+              <div class="mfr-card__logo-wrap">
+                <img class="mfr-card__logo"
+                     src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Walther_Logo.svg"
+                     alt="Walther"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+                <span class="mfr-card__logo-fallback" style="display:none">WALTHER</span>
+              </div>
+              <p class="mfr-card__name">Walther</p>
+              <p class="mfr-card__tagline">Precision Engineering</p>
+              <a href="shop.html?q=Walther" class="mfr-card__btn">Shop Walther</a>
+            </div>
+
+          </div>
+
+          <div class="mfr-trust">
+            <p>All products sold comply with federal and state law. FFL transfers required for shipped firearms. Must be 18+ for long guns, 21+ for handguns.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="site-footer" class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a href="index.html" class="footer-brand__logo" aria-label="Warrior of God Tactical">
+              <svg class="footer-shield-svg" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z" fill="rgba(14,165,233,0.09)" stroke="#0ea5e9" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M20 6 L34 12 L34 27 C34 36 20 45 20 45 C20 45 6 36 6 27 L6 12 Z" fill="none" stroke="#0ea5e9" stroke-width="0.7" stroke-linejoin="round" opacity="0.35"/>
+                <line x1="20" y1="13" x2="20" y2="39" stroke="#0ea5e9" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="10" y1="22" x2="30" y2="22" stroke="#0ea5e9" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="20" cy="22" r="2.5" fill="#0ea5e9" opacity="0.95"/>
+                <circle cx="20" cy="22" r="5" fill="none" stroke="#0ea5e9" stroke-width="0.6" opacity="0.4"/>
+              </svg>
+            </a>
+            <p class="footer-brand__tagline">Equipped for Every Battle.</p>
+            <div class="footer-social">
+              <a href="#" class="footer-social__link" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+              <a href="#" class="footer-social__link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+              <a href="#" class="footer-social__link" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="#0d0d0d" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg></a>
+            </div>
+          </div>
+          <nav class="footer-nav" aria-label="Footer Navigation">
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Quick Links</h3>
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop All</a></li>
+                <li><a href="manufacturers.html">Shop Manufacturers</a></li>
+                <li><a href="index.html#deals">Deals</a></li>
+                <li><a href="index.html#about">About Us</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Manufacturers</h3>
+              <ul>
+                <li><a href="shop.html?q=Glock">Glock</a></li>
+                <li><a href="shop.html?q=SIG+Sauer">SIG Sauer</a></li>
+                <li><a href="shop.html?q=Ruger">Ruger</a></li>
+                <li><a href="shop.html?q=Smith+%26+Wesson">Smith &amp; Wesson</a></li>
+                <li><a href="shop.html?q=Springfield">Springfield Armory</a></li>
+                <li><a href="shop.html?q=Taurus">Taurus</a></li>
+                <li><a href="shop.html?q=Walther">Walther</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Support</h3>
+              <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Shipping Policy</a></li>
+                <li><a href="#">FFL Transfer Info</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="footer-legal">
+          <p class="footer-legal__compliance">All firearms sales comply with federal and state law. FFL transfers required for shipped firearms. Must be 18+ for long guns, 21+ for handguns.</p>
+          <p class="footer-legal__copyright">&copy; <span id="footer-year"></span> Warrior of God Tactical. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /#site-wrapper -->
+
+  <script>
+  (function () {
+    'use strict';
+    const siteWrapper = document.getElementById('site-wrapper');
+    if (document.documentElement.classList.contains('age-verified')) {
+      const g = document.getElementById('age-gate'); if (g) g.remove();
+      if (siteWrapper) siteWrapper.removeAttribute('hidden');
+    } else {
+      document.body.style.overflow = 'hidden';
+      document.getElementById('age-gate-confirm').addEventListener('click', function() {
+        const exp = new Date(Date.now() + 7 * 864e5).toUTCString();
+        document.cookie = 'wog_age_verified=yes;expires=' + exp + ';path=/;SameSite=Lax';
+        try { localStorage.setItem('wog_age_verified', 'yes'); } catch(e) {}
+        document.documentElement.classList.add('age-verified');
+        document.body.style.overflow = '';
+        if (siteWrapper) siteWrapper.removeAttribute('hidden');
+        const g = document.getElementById('age-gate');
+        if (g) { g.classList.add('hidden'); setTimeout(function(){ g.remove(); }, 400); }
+      });
+      document.getElementById('age-gate-deny').addEventListener('click', function() { window.location.href = 'https://www.google.com'; });
+    }
+
+    /* Nav mobile toggle */
+    const mobileBtn = document.querySelector('.mobile-menu-toggle');
+    const nav = document.getElementById('primary-nav');
+    if (mobileBtn && nav) {
+      mobileBtn.addEventListener('click', () => {
+        const open = nav.classList.toggle('nav--open');
+        mobileBtn.setAttribute('aria-expanded', open);
+      });
+    }
+
+    /* Search panel toggle */
+    const searchToggle = document.querySelector('.search-toggle');
+    const searchPanel  = document.getElementById('search-panel');
+    if (searchToggle && searchPanel) {
+      searchToggle.addEventListener('click', () => { searchPanel.hidden = !searchPanel.hidden; });
+    }
+
+    /* Footer year */
+    const fy = document.getElementById('footer-year');
+    if (fy) fy.textContent = new Date().getFullYear();
+
+    /* Scroll — add .scrolled to header */
+    const header = document.getElementById('site-header');
+    if (header) window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 20); }, { passive: true });
+
+  })();
+  </script>
+  <script src="assets/js/cart.js"></script>
+
+</body>
+</html>

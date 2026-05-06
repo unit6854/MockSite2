@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0d0d0d" />
+  <!-- Dynamic meta set by JS after product loads -->
+  <title>Product — Warrior of God Tactical</title>
+  <script>(function(){var ok=document.cookie.split(';').some(function(c){return c.trim().indexOf('wog_age_verified=')===0;});if(!ok){try{ok=localStorage.getItem('wog_age_verified')==='yes';}catch(e){}}if(ok)document.documentElement.classList.add('age-verified');})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <style>
+    /* ── Product page styles ───────────────────────────────────────────────── */
+    .pd-hero {
+      background:linear-gradient(135deg,#0d0d0d 0%,#0f1923 100%);
+      padding:calc(72px + 2rem) 0 0;
+      border-bottom:1px solid rgba(14,165,233,.1);
+    }
+    .pd-breadcrumb {
+      font-size:.78rem;
+      color:rgba(255,255,255,.4);
+      margin:0 0 1.5rem;
+    }
+    .pd-breadcrumb a {
+      color:rgba(255,255,255,.55);
+      text-decoration:none;
+      transition:color .15s;
+    }
+    .pd-breadcrumb a:hover { color:var(--wp--preset--color--primary,#0ea5e9); }
+    .pd-breadcrumb span { margin:0 .35rem; }
+
+    /* Two-column layout */
+    .pd-layout {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:3rem;
+      align-items:start;
+      padding-bottom:3rem;
+    }
+    @media(max-width:768px){
+      .pd-layout { grid-template-columns:1fr; gap:1.5rem; }
+    }
+
+    /* Gallery */
+    .pd-gallery {}
+    .pd-gallery__main {
+      background:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:4px;
+      overflow:hidden;
+      aspect-ratio:4/3;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .pd-gallery__main img {
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      background:#fff;
+    }
+
+    /* Right column — info */
+    .pd-info {}
+    .pd-info__brand {
+      font-size:.75rem;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      color:var(--wp--preset--color--primary,#0ea5e9);
+      margin:0 0 .4rem;
+    }
+    .pd-info__name {
+      font-family:Oswald,sans-serif;
+      font-size:clamp(1.5rem,3vw,2rem);
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.03em;
+      color:#fff;
+      margin:0 0 .75rem;
+      line-height:1.15;
+    }
+    .pd-info__badge {
+      display:inline-block;
+      font-family:Oswald,sans-serif;
+      font-size:.7rem;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      padding:.2rem .6rem;
+      border-radius:2px;
+      margin-bottom:.75rem;
+      background:var(--wp--preset--color--primary,#0ea5e9);
+      color:#fff;
+    }
+    .pd-info__badge--sale { background:#e11d48; }
+    .pd-info__badge--hot  { background:#f97316; }
+    .pd-info__badge--new  { background:#10b981; }
+
+    .pd-info__price-row {
+      display:flex;
+      align-items:baseline;
+      gap:.65rem;
+      margin:0 0 1rem;
+    }
+    .pd-info__price {
+      font-family:Oswald,sans-serif;
+      font-size:2rem;
+      font-weight:700;
+      color:#fff;
+    }
+    .pd-info__original {
+      font-size:1rem;
+      color:rgba(255,255,255,.35);
+      text-decoration:line-through;
+    }
+    .pd-info__savings {
+      font-size:.8rem;
+      color:#10b981;
+      font-weight:500;
+    }
+
+    .pd-info__desc {
+      font-size:.9rem;
+      line-height:1.65;
+      color:rgba(255,255,255,.65);
+      margin:0 0 1.25rem;
+    }
+
+    /* Quick specs */
+    .pd-specs {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:.4rem .75rem;
+      margin:0 0 1.5rem;
+    }
+    .pd-spec {
+      display:flex;
+      flex-direction:column;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:3px;
+      padding:.5rem .65rem;
+    }
+    .pd-spec__label {
+      font-size:.65rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:rgba(255,255,255,.35);
+      margin-bottom:.15rem;
+    }
+    .pd-spec__value {
+      font-family:Oswald,sans-serif;
+      font-size:.9rem;
+      font-weight:500;
+      color:#fff;
+    }
+
+    /* Cart row */
+    .pd-cart-row {
+      display:flex;
+      gap:.65rem;
+      align-items:stretch;
+    }
+    .pd-qty {
+      display:flex;
+      align-items:center;
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:2px;
+      overflow:hidden;
+    }
+    .pd-qty__btn {
+      background:rgba(255,255,255,.06);
+      border:none;
+      color:#fff;
+      font-size:1.1rem;
+      width:2.2rem;
+      cursor:pointer;
+      transition:background .15s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:.4rem 0;
+    }
+    .pd-qty__btn:hover { background:rgba(14,165,233,.25); }
+    .pd-qty__val {
+      min-width:2.5rem;
+      text-align:center;
+      font-family:Oswald,sans-serif;
+      font-size:1rem;
+      font-weight:600;
+      color:#fff;
+      border:none;
+      background:transparent;
+      padding:.4rem 0;
+      pointer-events:none;
+    }
+    .pd-cart-btn {
+      flex:1;
+      background:var(--wp--preset--color--primary,#0ea5e9);
+      color:#fff;
+      border:none;
+      font-family:Oswald,sans-serif;
+      font-size:.95rem;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      padding:.7rem 1.25rem;
+      border-radius:2px;
+      cursor:pointer;
+      transition:background .18s;
+    }
+    .pd-cart-btn:hover { background:#0284c7; }
+    .pd-cart-btn.added { background:#10b981; }
+
+    .pd-wishlist-btn {
+      background:transparent;
+      border:1px solid rgba(255,255,255,.15);
+      color:rgba(255,255,255,.5);
+      border-radius:2px;
+      padding:.7rem .85rem;
+      cursor:pointer;
+      transition:all .18s;
+      display:flex;
+      align-items:center;
+    }
+    .pd-wishlist-btn:hover, .pd-wishlist-btn.active { border-color:#e11d48; color:#e11d48; }
+
+    .pd-compliance {
+      margin-top:1rem;
+      font-size:.72rem;
+      color:rgba(255,255,255,.3);
+      line-height:1.5;
+      border-top:1px solid rgba(255,255,255,.06);
+      padding-top:.75rem;
+    }
+
+    /* Real site link */
+    .pd-real-link {
+      margin-top:.75rem;
+      font-size:.75rem;
+    }
+    .pd-real-link a {
+      color:rgba(14,165,233,.6);
+      text-decoration:none;
+    }
+    .pd-real-link a:hover { color:var(--wp--preset--color--primary,#0ea5e9); }
+
+    /* Related products */
+    .pd-related {
+      padding:3rem 0 4rem;
+      background:#0d0d0d;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    .pd-related__heading {
+      font-family:Oswald,sans-serif;
+      font-size:1.4rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      color:#fff;
+      margin:0 0 1.5rem;
+    }
+    .pd-related__grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+      gap:1rem;
+    }
+    .pd-related-card {
+      background:#111820;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:4px;
+      overflow:hidden;
+      text-decoration:none;
+      display:block;
+      transition:transform .2s, border-color .2s;
+    }
+    .pd-related-card:hover { transform:translateY(-3px); border-color:rgba(14,165,233,.3); }
+    .pd-related-card__img {
+      width:100%;
+      aspect-ratio:350/250;
+      object-fit:contain;
+      display:block;
+      background:#fff;
+    }
+    .pd-related-card__body { padding:.65rem .75rem; }
+    .pd-related-card__brand { font-size:.65rem; text-transform:uppercase; letter-spacing:.08em; color:var(--wp--preset--color--primary,#0ea5e9); margin:0 0 .2rem; }
+    .pd-related-card__name { font-family:Oswald,sans-serif; font-size:.9rem; font-weight:500; color:#fff; margin:0 0 .35rem; line-height:1.2; }
+    .pd-related-card__price { font-family:Oswald,sans-serif; font-size:.95rem; font-weight:600; color:#fff; margin:0; }
+
+    /* 404 state */
+    .pd-not-found {
+      text-align:center;
+      padding:8rem 1rem;
+    }
+    .pd-not-found h1 { font-family:Oswald,sans-serif; font-size:2rem; color:#fff; margin:0 0 1rem; }
+    .pd-not-found p { color:rgba(255,255,255,.5); margin:0 0 1.5rem; }
+  </style>
+</head>
+<body class="page--inner">
+
+  <!-- AGE GATE -->
+  <div id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-heading">
+    <div class="age-gate__overlay"></div>
+    <div class="age-gate__card">
+      <div class="age-gate__emblem">
+        <img src="assets/images/logo.png" alt="Warrior of God Tactical" class="age-gate__logo" onerror="this.style.display='none'" />
+        <div class="age-gate__cross" aria-hidden="true"></div>
+      </div>
+      <p class="age-gate__eyebrow">Entry Restriction</p>
+      <h2 id="age-gate-heading" class="age-gate__heading">Age Verification Required</h2>
+      <p class="age-gate__body">
+        You must be <strong>18 years of age or older</strong> to enter this website.
+        This site contains products and content related to firearms and tactical equipment
+        regulated by federal and state law.
+      </p>
+      <div class="age-gate__actions">
+        <button id="age-gate-confirm" class="btn btn--primary btn--lg">I Am 18 or Older — Enter Site</button>
+        <button id="age-gate-deny" class="btn btn--ghost btn--sm">I Am Under 18 — Exit</button>
+      </div>
+      <p class="age-gate__legal">
+        By entering, you confirm you are of legal age and agree to our
+        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+
+  <div id="site-wrapper" class="site-wrapper" hidden>
+
+    <!-- HEADER -->
+    <header id="site-header" class="site-header" role="banner">
+      <div class="container site-header__inner">
+        <a href="index.html" class="site-header__logo" aria-label="Warrior of God Tactical — Home">
+          <span class="nav-shield-glow">
+            <svg class="nav-shield-logo" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z"
+                    fill="rgba(14,165,233,0.07)" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M20 7 L32 12 L32 26 C32 34 20 43 20 43 C20 43 8 34 8 26 L8 12 Z"
+                    fill="none" stroke="#0ea5e9" stroke-width="0.8" stroke-linejoin="round" opacity="0.4"/>
+              <line x1="20" y1="13" x2="20" y2="38" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <line x1="11" y1="22" x2="29" y2="22" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="20" cy="22" r="2" fill="#0ea5e9" opacity="0.9"/>
+            </svg>
+          </span>
+          <span class="logo-text">WOG<em>Tactical</em></span>
+        </a>
+
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary Navigation">
+          <ul class="primary-nav__list" role="list">
+            <li><a href="index.html"          class="primary-nav__link">Home</a></li>
+            <li class="has-dropdown">
+              <a href="shop.html" class="primary-nav__link" aria-haspopup="true" aria-expanded="false">
+                Shop <span class="nav-arrow" aria-hidden="true">&#x25BE;</span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li role="none"><a href="shop.html?tab=firearms"  role="menuitem">Firearms</a></li>
+                <li role="none"><a href="shop.html?tab=ammo"      role="menuitem">Ammunition</a></li>
+                <li role="none"><a href="shop.html?tab=magazines" role="menuitem">Magazines</a></li>
+                <li role="none"><a href="shop.html?tab=optics"    role="menuitem">Optics</a></li>
+                <li role="none"><a href="shop.html?tab=gear"      role="menuitem">Holsters &amp; Gear</a></li>
+                <li role="none"><a href="shop.html?tab=hunting"   role="menuitem">Hunting &amp; Camping</a></li>
+                <li role="none"><a href="shop.html?tab=apparel"   role="menuitem">Apparel</a></li>
+              </ul>
+            </li>
+            <li><a href="index.html#deals"   class="primary-nav__link">Deals</a></li>
+            <li><a href="index.html#about"   class="primary-nav__link">About Us</a></li>
+            <li><a href="index.html#contact" class="primary-nav__link">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="site-header__actions">
+          <button class="icon-btn search-toggle" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </button>
+          <a href="cart.html" class="icon-btn cart-btn" aria-label="Shopping Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <span class="cart-count" aria-label="0 items">0</span>
+          </a>
+          <button class="mobile-menu-toggle" aria-label="Open Menu" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+
+      <div id="search-panel" class="search-panel" hidden>
+        <div class="container">
+          <form class="search-form" role="search" id="search-form">
+            <input type="search" id="search-input" placeholder="Search firearms, ammo, gear..." aria-label="Search products" />
+            <button type="submit" aria-label="Submit Search">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" role="main" id="pd-main">
+      <!-- Filled by JS -->
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="site-footer" class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a href="index.html" class="footer-brand__logo" aria-label="Warrior of God Tactical">
+              <svg class="footer-shield-svg" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20 2 L37 9 L37 27 C37 38 20 48 20 48 C20 48 3 38 3 27 L3 9 Z" fill="rgba(14,165,233,0.09)" stroke="#0ea5e9" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M20 6 L34 12 L34 27 C34 36 20 45 20 45 C20 45 6 36 6 27 L6 12 Z" fill="none" stroke="#0ea5e9" stroke-width="0.7" stroke-linejoin="round" opacity="0.35"/>
+                <line x1="20" y1="13" x2="20" y2="39" stroke="#0ea5e9" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="10" y1="22" x2="30" y2="22" stroke="#0ea5e9" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="20" cy="22" r="2.5" fill="#0ea5e9" opacity="0.95"/>
+                <circle cx="20" cy="22" r="5" fill="none" stroke="#0ea5e9" stroke-width="0.6" opacity="0.4"/>
+              </svg>
+            </a>
+            <p class="footer-brand__tagline">Equipped for Every Battle.</p>
+          </div>
+          <nav class="footer-nav" aria-label="Footer Navigation">
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Quick Links</h3>
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop All</a></li>
+                <li><a href="index.html#deals">Deals</a></li>
+                <li><a href="index.html#about">About Us</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Categories</h3>
+              <ul>
+                <li><a href="shop.html?tab=firearms">Firearms</a></li>
+                <li><a href="shop.html?tab=ammo">Ammunition</a></li>
+                <li><a href="shop.html?tab=magazines">Magazines</a></li>
+                <li><a href="shop.html?tab=optics">Optics</a></li>
+                <li><a href="shop.html?tab=gear">Holsters &amp; Gear</a></li>
+                <li><a href="shop.html?tab=hunting">Hunting &amp; Camping</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav__col">
+              <h3 class="footer-nav__heading">Support</h3>
+              <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Shipping Policy</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">FFL Transfer Info</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="footer-legal">
+          <p class="footer-legal__compliance">
+            All firearms sales comply with federal and state law.
+            FFL transfers required for shipped firearms.
+            Must be 18+ for long guns, 21+ for handguns.
+          </p>
+          <p class="footer-legal__copyright">
+            &copy; <span id="footer-year"></span> Warrior of God Tactical. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /#site-wrapper -->
+
+  <script src="assets/js/products.js" defer></script>
+  <script src="assets/js/cart.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── Age Gate ──────────────────────────────────────────────────────────── */
+    /* ── Age Gate ──────────────────────────────────────────────────────────── */
+    const siteWrapper = document.getElementById('site-wrapper');
+    if (document.documentElement.classList.contains('age-verified')) {
+      const g = document.getElementById('age-gate');
+      if (g) g.remove();
+      if (siteWrapper) siteWrapper.removeAttribute('hidden');
+    } else {
+      document.body.style.overflow = 'hidden';
+      document.getElementById('age-gate-confirm').addEventListener('click', function() {
+        const exp = new Date(Date.now() + 7 * 864e5).toUTCString();
+        document.cookie = 'wog_age_verified=yes;expires=' + exp + ';path=/;SameSite=Lax';
+        try { localStorage.setItem('wog_age_verified', 'yes'); } catch(e) {}
+        document.documentElement.classList.add('age-verified');
+        document.body.style.overflow = '';
+        if (siteWrapper) siteWrapper.removeAttribute('hidden');
+        const g = document.getElementById('age-gate');
+        if (g) { g.classList.add('hidden'); setTimeout(function(){ g.remove(); }, 400); }
+      });
+      document.getElementById('age-gate-deny').addEventListener('click', function() {
+        window.location.href = 'https://www.google.com';
+      });
+    }
+
+    /* ── Nav mobile toggle ────────────────────────────────────────────────── */
+    const mobileBtn = document.querySelector('.mobile-menu-toggle');
+    const nav = document.getElementById('primary-nav');
+    if (mobileBtn && nav) {
+      mobileBtn.addEventListener('click', () => {
+        const open = nav.classList.toggle('nav--open');
+        mobileBtn.setAttribute('aria-expanded', open);
+      });
+    }
+
+    /* ── Search panel ─────────────────────────────────────────────────────── */
+    const searchToggle = document.querySelector('.search-toggle');
+    const searchPanel  = document.getElementById('search-panel');
+    if (searchToggle && searchPanel) {
+      searchToggle.addEventListener('click', () => {
+        searchPanel.hidden = !searchPanel.hidden;
+        if (!searchPanel.hidden) {
+          const inp = document.getElementById('search-input');
+          if (inp) setTimeout(() => inp.focus(), 50);
+        }
+      });
+    }
+    const searchForm = document.getElementById('search-form');
+    if (searchForm) {
+      searchForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const q = document.getElementById('search-input').value.trim();
+        if (q) window.location.href = 'shop.html?q=' + encodeURIComponent(q);
+      });
+    }
+
+    /* ── Footer year ─────────────────────────────────────────────────────── */
+    const fy = document.getElementById('footer-year');
+    if (fy) fy.textContent = new Date().getFullYear();
+
+    /* ── Header scroll — always solid on inner pages ──────────────────────── */
+    const header = document.getElementById('site-header');
+    if (header) {
+      header.classList.add('scrolled');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) header.classList.add('scrolled');
+      }, { passive: true });
+    }
+
+    /* ── Footer neon logo ─────────────────────────────────────────────────── */
+    (function initFooterNeonLogo() {
+      const canvas = document.getElementById('footer-neon-canvas');
+      if (!canvas) return;
+      const SZ = 200; canvas.width = SZ; canvas.height = SZ;
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) { canvas.style.display = 'none'; return; }
+      gl.viewport(0, 0, SZ, SZ);
+      const VERT = `attribute vec2 a_pos;varying vec2 v_uv;void main(){v_uv=(a_pos+1.0)*0.5;gl_Position=vec4(a_pos,0.0,1.0);}`;
+      const FRAG = `precision mediump float;varying vec2 v_uv;uniform sampler2D u_tex;uniform float u_time;uniform float u_px;
+        float luma(vec4 c){return dot(c.rgb,vec3(0.299,0.587,0.114))*c.a;}
+        float ring(vec2 uv,float r){float v=0.0;v+=luma(texture2D(u_tex,uv+vec2(r,0.0)));v+=luma(texture2D(u_tex,uv+vec2(-r,0.0)));v+=luma(texture2D(u_tex,uv+vec2(0.0,r)));v+=luma(texture2D(u_tex,uv+vec2(0.0,-r)));v+=luma(texture2D(u_tex,uv+vec2(0.707*r,0.707*r)));v+=luma(texture2D(u_tex,uv+vec2(-0.707*r,0.707*r)));v+=luma(texture2D(u_tex,uv+vec2(0.707*r,-0.707*r)));v+=luma(texture2D(u_tex,uv+vec2(-0.707*r,-0.707*r)));return v/8.0;}
+        void main(){vec2 uv=v_uv;float core=luma(texture2D(u_tex,uv));float g1=ring(uv,u_px*3.5);float g2=ring(uv,u_px*12.0);float g3=ring(uv,u_px*28.0);float shimmer=0.82+0.18*sin(u_time*3.2+uv.x*14.0-uv.y*11.0);float breath=0.91+0.09*sin(u_time*0.9);float vig=1.0-length(uv-0.5)*1.15;vig=clamp(vig,0.0,1.0);vec3 bg=vec3(0.008,0.025,0.14)*vig;vec3 colWide=vec3(0.0,0.28,0.88);vec3 colMid=vec3(0.0,0.75,1.0);vec3 colCore=mix(vec3(0.0,0.88,1.0),vec3(0.52,1.0,1.0),core*shimmer);vec3 col=bg;col+=colWide*g3*1.6*breath;col+=colMid*g2*3.0*breath;col+=colMid*g1*4.5*breath;col+=colCore*core*3.5*shimmer;col=min(col,vec3(1.0));gl_FragColor=vec4(col,1.0);}`;
+      function mkShader(type, src) { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+      const prog = gl.createProgram();
+      gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, VERT));
+      gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, FRAG));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { canvas.style.display = 'none'; return; }
+      gl.useProgram(prog);
+      const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+      const aPos = gl.getAttribLocation(prog, 'a_pos');
+      gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+      const uTime = gl.getUniformLocation(prog, 'u_time');
+      gl.uniform1i(gl.getUniformLocation(prog, 'u_tex'), 0);
+      gl.uniform1f(gl.getUniformLocation(prog, 'u_px'), 1.0 / SZ);
+      gl.clearColor(0, 0.025, 0.14, 1);
+      const tex = gl.createTexture(); const img = new Image(); img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, tex); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        const t0 = performance.now();
+        (function loop() { requestAnimationFrame(loop); gl.clear(gl.COLOR_BUFFER_BIT); gl.uniform1f(uTime, (performance.now()-t0)/1000); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); })();
+      };
+      img.onerror = function() { canvas.style.display = 'none'; };
+      img.src = 'assets/images/spartan.webp';
+    })();
+
+    /* ── Utility ──────────────────────────────────────────────────────────── */
+    function escHtml(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function fmtPrice(n) { return '$' + Number(n).toFixed(2); }
+
+    /* ── Wait for products.js ─────────────────────────────────────────────── */
+    function waitForProducts(cb) {
+      if (typeof WOG_PRODUCTS !== 'undefined') { cb(); return; }
+      const t = setInterval(() => {
+        if (typeof WOG_PRODUCTS !== 'undefined') { clearInterval(t); cb(); }
+      }, 40);
+    }
+
+    waitForProducts(boot);
+
+    /* ── Main boot ────────────────────────────────────────────────────────── */
+    function boot() {
+      const params = new URLSearchParams(window.location.search);
+      const id     = params.get('id');
+      const main   = document.getElementById('main-content');
+
+      if (!id || typeof WOG_PRODUCTS === 'undefined') {
+        renderNotFound(main);
+        return;
+      }
+
+      const product = WOG_PRODUCTS.find(p => p.id === id);
+      if (!product) { renderNotFound(main, id); return; }
+
+      document.title = product.name + ' — Warrior of God Tactical';
+      renderProduct(main, product);
+    }
+
+    /* ── Not found ────────────────────────────────────────────────────────── */
+    function renderNotFound(main, id) {
+      main.innerHTML = `
+        <div class="pd-hero">
+          <div class="container" style="padding-bottom:3rem">
+            <div class="pd-not-found">
+              <h1>Product Not Found</h1>
+              <p>${id ? 'No product with ID <code>' + escHtml(id) + '</code> was found.' : 'No product ID specified.'}</p>
+              <a href="shop.html" class="btn btn--primary">Browse All Products</a>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    /* ── Render product ───────────────────────────────────────────────────── */
+    function renderProduct(main, p) {
+      const savings = p.originalPrice ? (p.originalPrice - p.price).toFixed(2) : null;
+      const badgeClass = p.badge
+        ? (p.badge.toLowerCase() === 'sale' ? 'pd-info__badge--sale'
+          : p.badge.toLowerCase().includes('hot') ? 'pd-info__badge--hot'
+          : p.badge.toLowerCase() === 'new' ? 'pd-info__badge--new' : '')
+        : '';
+
+      const specsHTML = p.specs
+        ? Object.entries(p.specs).map(([k, v]) =>
+            `<div class="pd-spec"><span class="pd-spec__label">${escHtml(k)}</span><span class="pd-spec__value">${escHtml(v)}</span></div>`
+          ).join('')
+        : '';
+
+      const categoryLabel = getCategoryLabel(p.tab);
+      const realLinkHTML = p.wogHref && p.wogHref !== '#'
+        ? `<p class="pd-real-link">View on <a href="${escHtml(p.wogHref)}" target="_blank" rel="noopener">WarriorofGodTactical.com ↗</a></p>`
+        : '';
+
+      main.innerHTML = `
+        <div class="pd-hero">
+          <div class="container">
+            <p class="pd-breadcrumb">
+              <a href="index.html">Home</a><span>/</span>
+              <a href="shop.html">Shop</a><span>/</span>
+              <a href="shop.html?tab=${escHtml(p.tab)}">${escHtml(categoryLabel)}</a><span>/</span>
+              <span>${escHtml(p.name)}</span>
+            </p>
+            <div class="pd-layout">
+
+              <!-- Gallery -->
+              <div class="pd-gallery">
+                <div class="pd-gallery__main">
+                  <img id="pd-main-img"
+                       src="${escHtml(p.image)}"
+                       alt="${escHtml(p.name)}"
+                       width="700" height="525"
+                       onerror="this.src='https://placehold.co/700x525/0f1923/0ea5e9?text=${encodeURIComponent(p.name)}&font=oswald'" />
+                </div>
+              </div>
+
+              <!-- Info -->
+              <div class="pd-info">
+                ${p.badge ? `<span class="pd-info__badge ${badgeClass}">${escHtml(p.badge)}</span>` : ''}
+                <p class="pd-info__brand">${escHtml(p.brand)}</p>
+                <h1 class="pd-info__name">${escHtml(p.name)}</h1>
+
+                <div class="pd-info__price-row">
+                  <span class="pd-info__price">${fmtPrice(p.price)}</span>
+                  ${p.originalPrice ? `<span class="pd-info__original">${fmtPrice(p.originalPrice)}</span>` : ''}
+                  ${savings ? `<span class="pd-info__savings">Save $${savings}</span>` : ''}
+                </div>
+
+                <p class="pd-info__desc">${escHtml(p.description)}</p>
+
+                ${specsHTML ? `<div class="pd-specs" aria-label="Product specifications">${specsHTML}</div>` : ''}
+
+                <div class="pd-cart-row">
+                  <div class="pd-qty" aria-label="Quantity">
+                    <button class="pd-qty__btn" id="qty-minus" aria-label="Decrease quantity">&#8722;</button>
+                    <span class="pd-qty__val" id="qty-val" aria-live="polite">1</span>
+                    <button class="pd-qty__btn" id="qty-plus"  aria-label="Increase quantity">&#43;</button>
+                  </div>
+                  <button class="pd-cart-btn" id="add-to-cart">
+                    ${p.inStock ? 'Add to Cart' : 'Out of Stock'}
+                  </button>
+                  <button class="pd-wishlist-btn" id="wishlist-btn" aria-label="Add to wishlist" aria-pressed="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <p class="pd-compliance">
+                  ⚠ All firearms require FFL transfer. Must be 21+ for handguns, 18+ for long guns.
+                  Buyer is responsible for compliance with all federal, state, and local laws.
+                  We do not ship to prohibited jurisdictions.
+                </p>
+                ${realLinkHTML}
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Related products -->
+        <section class="pd-related" id="pd-related">
+          <div class="container">
+            <h2 class="pd-related__heading">More in ${escHtml(categoryLabel)}</h2>
+            <div class="pd-related__grid" id="related-grid"></div>
+          </div>
+        </section>`;
+
+      bindInteractions(p);
+      renderRelated(p);
+    }
+
+    /* ── Interactions ─────────────────────────────────────────────────────── */
+    function bindInteractions(p) {
+      let qty = 1;
+      const qtyVal   = document.getElementById('qty-val');
+      const qtyMinus = document.getElementById('qty-minus');
+      const qtyPlus  = document.getElementById('qty-plus');
+      const cartBtn  = document.getElementById('add-to-cart');
+      const wishBtn  = document.getElementById('wishlist-btn');
+      const cartCountEl = document.querySelector('.cart-count');
+      let cartTotal = 0;
+
+      if (qtyMinus) qtyMinus.addEventListener('click', () => { if (qty > 1) { qty--; qtyVal.textContent = qty; } });
+      if (qtyPlus)  qtyPlus.addEventListener('click',  () => { if (qty < 99) { qty++; qtyVal.textContent = qty; } });
+
+      if (cartBtn && p.inStock) {
+        cartBtn.addEventListener('click', () => {
+          WOGCart.add(p, qty);
+          cartBtn.textContent = 'Added!';
+          cartBtn.classList.add('added');
+          setTimeout(() => {
+            cartBtn.textContent = 'Add to Cart';
+            cartBtn.classList.remove('added');
+          }, 1800);
+        });
+      }
+
+      if (wishBtn) {
+        let wished = false;
+        wishBtn.addEventListener('click', () => {
+          wished = !wished;
+          wishBtn.classList.toggle('active', wished);
+          wishBtn.setAttribute('aria-pressed', wished);
+          const svg = wishBtn.querySelector('svg path');
+          if (svg) svg.setAttribute('fill', wished ? '#e11d48' : 'none');
+        });
+      }
+    }
+
+    /* ── Related products ─────────────────────────────────────────────────── */
+    function renderRelated(p) {
+      const grid = document.getElementById('related-grid');
+      if (!grid || typeof WOG_PRODUCTS === 'undefined') return;
+
+      const related = WOG_PRODUCTS
+        .filter(r => r.id !== p.id && r.tab === p.tab)
+        .slice(0, 4);
+
+      if (related.length === 0) {
+        const section = document.getElementById('pd-related');
+        if (section) section.hidden = true;
+        return;
+      }
+
+      grid.innerHTML = related.map(r => `
+        <a href="product.html?id=${encodeURIComponent(r.id)}" class="pd-related-card">
+          <img src="${escHtml(r.image)}" alt="${escHtml(r.name)}" class="pd-related-card__img" loading="lazy" width="350" height="250"
+               onerror="this.src='https://placehold.co/350x250/0f1923/0ea5e9?text=${encodeURIComponent(r.name)}&font=oswald'" />
+          <div class="pd-related-card__body">
+            <p class="pd-related-card__brand">${escHtml(r.brand)}</p>
+            <p class="pd-related-card__name">${escHtml(r.name)}</p>
+            <p class="pd-related-card__price">${fmtPrice(r.price)}</p>
+          </div>
+        </a>`).join('');
+    }
+
+    /* ── Category label helper ────────────────────────────────────────────── */
+    function getCategoryLabel(tabId) {
+      if (typeof WOG_CATEGORIES === 'undefined') return tabId;
+      const cat = WOG_CATEGORIES.find(c => c.id === tabId);
+      return cat ? cat.label : tabId;
+    }
+
+  }());
+  </script>
+
+</body>
+</html>
