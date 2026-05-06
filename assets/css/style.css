@@ -731,7 +731,6 @@ input, textarea, select {
 .hero-logo-canvas,
 .hero-logo-fallback {
   transform-style: preserve-3d;
-  will-change: transform;
 }
 
 .hero-logo-canvas {
