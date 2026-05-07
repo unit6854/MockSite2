@@ -705,10 +705,10 @@ input, textarea, select {
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse at center,
-    rgba(0, 220, 255, 0.44) 0%,
-    rgba(0, 200, 255, 0.19) 28%,
-    rgba(0, 180, 255, 0.06) 46%,
-    transparent 60%);
+    rgba(0, 220, 255, 0.62) 0%,
+    rgba(0, 200, 255, 0.27) 35%,
+    rgba(0, 180, 255, 0.08) 55%,
+    transparent 78%);
   opacity: 0;
   animation: neon-outer-pulse 9s ease-in-out infinite;
   pointer-events: none;
