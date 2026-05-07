@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initNewsletter();
   initContactForm();
   initFooterYear();
-  initFooterNeonLogo();
+  initFooterShield();
+  initLogoRotate();
 });
 
 /* --------------------------------------------------------------------------
@@ -91,12 +92,16 @@ function initNav() {
   const mobileBtn = $('.mobile-menu-toggle');
   const nav       = $('#primary-nav');
 
-  // Scroll: add .scrolled class
+  // Scroll: add .scrolled class — rAF-throttled so it runs at most once per frame
+  let _scrollTicking = false;
   const onScroll = () => {
     header.classList.toggle('scrolled', window.scrollY > 20);
     updateActiveNavLink();
+    _scrollTicking = false;
   };
-  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scroll', () => {
+    if (!_scrollTicking) { requestAnimationFrame(onScroll); _scrollTicking = true; }
+  }, { passive: true });
   onScroll();
 
   // Mobile menu toggle
@@ -138,14 +143,15 @@ function initNav() {
   });
 }
 
+let _navSections = null, _navLinks = null;
 function updateActiveNavLink() {
-  const sections = $$('section[id], main section[id]');
-  const links = $$('.primary-nav__link');
+  _navSections = _navSections || $$('section[id], main section[id]');
+  _navLinks    = _navLinks    || $$('.primary-nav__link');
   let current = '';
-  sections.forEach(sec => {
+  _navSections.forEach(sec => {
     if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
   });
-  links.forEach(link => {
+  _navLinks.forEach(link => {
     const href = link.getAttribute('href')?.replace('#', '');
     link.classList.toggle('active', href === current);
   });
@@ -167,422 +173,166 @@ function initSearch() {
 }
 
 /* --------------------------------------------------------------------------
-   5. HERO WEBGL — Three.js Particle Field
-   Graceful degradation: if Three.js fails, hero bg image is the fallback.
+   5. HERO WEBGL — Raw WebGL Particle Field (no Three.js dependency)
+   Graceful degradation: if WebGL unavailable, hero bg image is the fallback.
    -------------------------------------------------------------------------- */
 function initHeroWebGL() {
   const canvas = $('#hero-canvas');
-  if (!canvas || typeof THREE === 'undefined') return;
+  if (!canvas) return;
 
-  let running = true;
-  const W = canvas.clientWidth, H = canvas.clientHeight;
+  const gl = canvas.getContext('webgl', {
+    alpha: true, antialias: false, powerPreference: 'low-power', preserveDrawingBuffer: false,
+  });
+  if (!gl) return;
 
-  // Renderer
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-  renderer.setSize(W, H);
+  const vert = `
+    attribute vec3 a_pos;
+    attribute vec3 a_col;
+    attribute float a_sz;
+    uniform mat4 u_proj;
+    uniform mat4 u_mv;
+    varying vec3 v_col;
+    void main(){
+      v_col=a_col;
+      vec4 mv=u_mv*vec4(a_pos,1.0);
+      gl_Position=u_proj*mv;
+      gl_PointSize=a_sz*(400.0/-mv.z);
+    }`;
+  const frag = `
+    precision mediump float;
+    varying vec3 v_col;
+    uniform float u_alpha;
+    void main(){
+      vec2 c=gl_PointCoord-0.5;
+      if(dot(c,c)>0.25)discard;
+      gl_FragColor=vec4(v_col,u_alpha);
+    }`;
 
-  // Scene / Camera
-  const scene  = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 1000);
-  camera.position.z = 400;
+  function mkShader(type, src) {
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, vert));
+  gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, frag));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
 
-  // Particle system
-  const PARTICLE_COUNT = 1200;
-  const positions = new Float32Array(PARTICLE_COUNT * 3);
-  const colors    = new Float32Array(PARTICLE_COUNT * 3);
-  const sizes     = new Float32Array(PARTICLE_COUNT);
+  const loc = {
+    aPos:  gl.getAttribLocation(prog, 'a_pos'),
+    aCol:  gl.getAttribLocation(prog, 'a_col'),
+    aSz:   gl.getAttribLocation(prog, 'a_sz'),
+    proj:  gl.getUniformLocation(prog, 'u_proj'),
+    mv:    gl.getUniformLocation(prog, 'u_mv'),
+    alpha: gl.getUniformLocation(prog, 'u_alpha'),
+  };
 
-  const goldColor  = new THREE.Color(0xc8963e);
-  const whiteColor = new THREE.Color(0xf0ede8);
+  // Interleaved VBO: pos(3) col(3) sz(1) = 7 floats/vertex
+  const N = 700, S = 7;
+  const data = new Float32Array(N * S);
+  const gold  = [0.784, 0.588, 0.243]; // #c8963e
+  const white = [0.941, 0.929, 0.910]; // #f0ede8
+  for (let i = 0; i < N; i++) {
+    const o = i * S;
+    data[o]   = (Math.random() - 0.5) * 1200;
+    data[o+1] = (Math.random() - 0.5) * 800;
+    data[o+2] = (Math.random() - 0.5) * 600;
+    const c = Math.random() > 0.85 ? gold : white;
+    data[o+3] = c[0]; data[o+4] = c[1]; data[o+5] = c[2];
+    data[o+6] = Math.random() * 2.5 + 0.5;
+  }
+  const vbo = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+  const bpe = Float32Array.BYTES_PER_ELEMENT;
+  gl.enableVertexAttribArray(loc.aPos); gl.vertexAttribPointer(loc.aPos, 3, gl.FLOAT, false, S*bpe, 0);
+  gl.enableVertexAttribArray(loc.aCol); gl.vertexAttribPointer(loc.aCol, 3, gl.FLOAT, false, S*bpe, 3*bpe);
+  gl.enableVertexAttribArray(loc.aSz);  gl.vertexAttribPointer(loc.aSz,  1, gl.FLOAT, false, S*bpe, 6*bpe);
 
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    // Spread particles across the viewport
-    positions[i * 3]     = (Math.random() - 0.5) * 1200;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 800;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 600;
+  // Pre-allocated matrix buffers (column-major, WebGL convention)
+  const _proj = new Float32Array(16);
+  const _mv   = new Float32Array(16);
 
-    const mix = Math.random();
-    const col = mix > 0.85 ? goldColor : whiteColor;
-    colors[i * 3]     = col.r;
-    colors[i * 3 + 1] = col.g;
-    colors[i * 3 + 2] = col.b;
-
-    sizes[i] = Math.random() * 2.5 + 0.5;
+  function setPerspective(fovDeg, aspect) {
+    const f = 1 / Math.tan(fovDeg * Math.PI / 360), nf = 1 / (0.1 - 1000);
+    _proj.fill(0);
+    _proj[0] = f / aspect; _proj[5] = f;
+    _proj[10] = (1000 + 0.1) * nf; _proj[11] = -1;
+    _proj[14] = 2 * 1000 * 0.1 * nf;
   }
 
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geo.setAttribute('color',    new THREE.BufferAttribute(colors,    3));
-  geo.setAttribute('size',     new THREE.BufferAttribute(sizes,     1));
+  // MV = translate(-cx,-cy,-400) * RotX * RotY  (column-major)
+  function buildMV(rX, rY, cx, cy) {
+    const cX=Math.cos(rX), sX=Math.sin(rX), cY=Math.cos(rY), sY=Math.sin(rY);
+    _mv[0]=cY;   _mv[1]=sX*sY;  _mv[2]=-cX*sY; _mv[3]=0;
+    _mv[4]=0;    _mv[5]=cX;     _mv[6]=sX;     _mv[7]=0;
+    _mv[8]=sY;   _mv[9]=-sX*cY; _mv[10]=cX*cY; _mv[11]=0;
+    _mv[12]=-cx; _mv[13]=-cy;   _mv[14]=-400;  _mv[15]=1;
+  }
 
-  const mat = new THREE.PointsMaterial({
-    size: 1.8,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.55,
-    sizeAttenuation: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
+  function resize() {
+    const w = canvas.clientWidth, h = canvas.clientHeight || 1;
+    canvas.width  = Math.round(w * Math.min(devicePixelRatio, 1.5));
+    canvas.height = Math.round(h * Math.min(devicePixelRatio, 1.5));
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    setPerspective(60, w / h);
+    gl.uniformMatrix4fv(loc.proj, false, _proj);
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE); // additive blending
+
+  let heroVisible = true, tabVisible = !document.hidden;
+  let running = heroVisible && tabVisible;
+  let frame = 0, lastRender = 0;
+  let rotX = 0, rotY = 0, camX = 0, camY = 0, mouseX = 0, mouseY = 0;
+
+  function updateRunning() {
+    const was = running;
+    running = heroVisible && tabVisible;
+    if (running && !was) animate(performance.now());
+  }
+  document.addEventListener('visibilitychange', () => {
+    tabVisible = !document.hidden;
+    updateRunning();
   });
 
-  const particles = new THREE.Points(geo, mat);
-  scene.add(particles);
-
-  // Mouse parallax
-  let mouseX = 0, mouseY = 0;
   window.addEventListener('mousemove', (e) => {
+    if (!running) return;
     mouseX = (e.clientX / window.innerWidth  - 0.5) * 0.4;
     mouseY = (e.clientY / window.innerHeight - 0.5) * 0.4;
   }, { passive: true });
 
-  // Resize
-  window.addEventListener('resize', () => {
-    if (!running) return;
-    const nW = canvas.clientWidth, nH = canvas.clientHeight;
-    renderer.setSize(nW, nH);
-    camera.aspect = nW / nH;
-    camera.updateProjectionMatrix();
-  }, { passive: true });
-
-  // Animate
-  let frame = 0;
-  function animate() {
+  function animate(now) {
     if (!running) return;
     requestAnimationFrame(animate);
+    if (now - lastRender < 32) return; // ~30fps cap
+    lastRender = now;
     frame++;
-
-    particles.rotation.y += 0.0003;
-    particles.rotation.x += 0.00015;
-
-    // Subtle parallax follow
-    camera.position.x += (mouseX * 60 - camera.position.x) * 0.04;
-    camera.position.y += (-mouseY * 40 - camera.position.y) * 0.04;
-    camera.lookAt(scene.position);
-
-    // Pulse opacity — 1/3 original speed
-    mat.opacity = 0.45 + Math.sin(frame * 0.00267) * 0.1;
-
-    renderer.render(scene, camera);
+    rotY += 0.0006; rotX += 0.0003;
+    camX += (mouseX * 60 - camX) * 0.078;
+    camY += (-mouseY * 40 - camY) * 0.078;
+    buildMV(rotX, rotY, camX, camY);
+    gl.uniformMatrix4fv(loc.mv, false, _mv);
+    gl.uniform1f(loc.alpha, 0.45 + Math.sin(frame * 0.00534) * 0.1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.POINTS, 0, N);
   }
-  animate();
+  if (running) animate(performance.now());
 
-  // Stop WebGL when hero is far out of view (perf)
-  const hero = $('#hero');
+  const hero   = $('#hero');
+  const logoEl = document.getElementById('logo-neon-canvas');
   if (hero) {
     const obs = new IntersectionObserver(([entry]) => {
-      running = entry.isIntersecting;
-      if (running) animate();
+      heroVisible = entry.isIntersecting;
+      updateRunning();
+      if (logoEl) logoEl.style.animationPlayState = heroVisible ? 'running' : 'paused';
     }, { rootMargin: '200px' });
     obs.observe(hero);
   }
-
 }
 
-/* --------------------------------------------------------------------------
-   5b. NEON LOGO — WebGL "Neural Line" shader on spartan.png
-       Converts white/light pixels into living cyan neon with volumetric glow.
-   -------------------------------------------------------------------------- */
-function initNeonLogo() {
-  const canvas = $('#logo-neon-canvas');
-  if (!canvas) return;
-
-  const CANVAS_SIZE = 512;
-  canvas.width  = CANVAS_SIZE;
-  canvas.height = CANVAS_SIZE;
-
-  initLogoRotate();
-
-  const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false })
-          || canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: false });
-  if (!gl) return;
-
-  gl.viewport(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-
-  /* ---- Shaders ---- */
-  const VERT = `
-    attribute vec2 a_pos;
-    varying vec2 v_uv;
-    void main() {
-      v_uv = (a_pos + 1.0) * 0.5;
-      gl_Position = vec4(a_pos, 0.0, 1.0);
-    }
-  `;
-
-  /* Neural Line fragment shader
-     - Three glow radii: tight core / mid / wide diffuse
-     - Animated shimmer (high-freq) + slow global pulse
-     - Deep cobalt background with subtle vignette
-  */
-  const FRAG = `
-    precision mediump float;
-    varying vec2 v_uv;
-    uniform sampler2D u_tex;
-    uniform float u_time;
-    uniform float u_px;   /* 1.0 / CANVAS_SIZE */
-
-    float luma(vec4 c) {
-      return dot(c.rgb, vec3(0.299, 0.587, 0.114)) * c.a;
-    }
-
-    /* 8-tap circular sample at radius r (in UV units) */
-    float ring(vec2 uv, float r) {
-      float v = 0.0;
-      v += luma(texture2D(u_tex, uv + vec2( r,      0.0  )));
-      v += luma(texture2D(u_tex, uv + vec2(-r,      0.0  )));
-      v += luma(texture2D(u_tex, uv + vec2( 0.0,    r    )));
-      v += luma(texture2D(u_tex, uv + vec2( 0.0,   -r    )));
-      v += luma(texture2D(u_tex, uv + vec2( 0.707*r,  0.707*r)));
-      v += luma(texture2D(u_tex, uv + vec2(-0.707*r,  0.707*r)));
-      v += luma(texture2D(u_tex, uv + vec2( 0.707*r, -0.707*r)));
-      v += luma(texture2D(u_tex, uv + vec2(-0.707*r, -0.707*r)));
-      return v / 8.0;
-    }
-
-    void main() {
-      vec2 uv = v_uv;
-
-      /* Center brightness */
-      float core  = luma(texture2D(u_tex, uv));
-
-      /* Layered glow at 3 radii */
-      float g1 = ring(uv, u_px *  3.5);   /* tight halo   */
-      float g2 = ring(uv, u_px * 12.0);   /* mid bloom    */
-      float g3 = ring(uv, u_px * 28.0);   /* wide diffuse */
-
-      /* Animated shimmer — flickers along lines */
-      float shimmer = 0.82 + 0.18 * sin(u_time * 3.2 + uv.x * 14.0 - uv.y * 11.0);
-
-      /* Slow global breath */
-      float breath  = 0.91 + 0.09 * sin(u_time * 0.9);
-
-      /* Glow palette (website cyan / blue) */
-      vec3 colWide = vec3(0.0,  0.28, 0.88);   /* cobalt-blue outer */
-      vec3 colMid  = vec3(0.0,  0.75, 1.0 );   /* cyan mid          */
-      /* Core shifts toward white-cyan on bright pixels (the glimmer) */
-      vec3 colCore = mix(
-        vec3(0.0,  0.88, 1.0 ),   /* cyan core          */
-        vec3(0.52, 1.0,  1.0 ),   /* white-cyan glimmer */
-        core * shimmer
-      );
-
-      /* Compose glow layers — no opaque background so canvas is transparent */
-      vec3 col = vec3(0.0);
-      col += colWide * g3 * 1.6  * breath;
-      col += colMid  * g2 * 3.0  * breath;
-      col += colMid  * g1 * 4.5  * breath;
-      col += colCore * core * 3.5 * shimmer;
-      col = min(col, vec3(1.0));
-
-      /* Alpha from glow luminance — dark pixels transparent, bright pixels opaque */
-      float lum = dot(col, vec3(0.299, 0.587, 0.114));
-      float alpha = clamp(lum * 2.5, 0.0, 1.0);
-
-      gl_FragColor = vec4(col, alpha);
-    }
-  `;
-
-  function mkShader(type, src) {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, src);
-    gl.compileShader(s);
-    return s;
-  }
-
-  const prog = gl.createProgram();
-  gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, VERT));
-  gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, FRAG));
-  gl.linkProgram(prog);
-
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-    console.warn('Neon logo shader link failed:', gl.getProgramInfoLog(prog));
-    return;
-  }
-
-  gl.useProgram(prog);
-
-  /* Fullscreen quad */
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-  const aPos = gl.getAttribLocation(prog, 'a_pos');
-  gl.enableVertexAttribArray(aPos);
-  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-  const uTime = gl.getUniformLocation(prog, 'u_time');
-  const uTex  = gl.getUniformLocation(prog, 'u_tex');
-  const uPx   = gl.getUniformLocation(prog, 'u_px');
-
-  gl.uniform1i(uTex, 0);
-  gl.uniform1f(uPx, 1.0 / CANVAS_SIZE);
-  gl.clearColor(0, 0, 0, 0);
-
-  /* Load spartan.png → WebGL texture */
-  const tex = gl.createTexture();
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-
-  img.onload = () => {
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-    let neonRunning = true;
-    const t0 = performance.now();
-
-    function neonLoop() {
-      if (!neonRunning) return;
-      requestAnimationFrame(neonLoop);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform1f(uTime, (performance.now() - t0) / 1000);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    }
-    neonLoop();
-
-    const heroEl = $('#hero');
-    if (heroEl) {
-      new IntersectionObserver(([e]) => {
-        neonRunning = e.isIntersecting;
-        if (neonRunning) neonLoop();
-      }, { rootMargin: '200px' }).observe(heroEl);
-    }
-  };
-
-  img.onerror = () => {
-    /* Fallback: static image with CSS neon filter */
-    const fb = document.createElement('img');
-    fb.src = 'assets/images/spartan.webp';
-    fb.alt = 'Warrior of God Tactical';
-    fb.className = 'hero-logo-canvas hero-logo-fallback';
-    canvas.replaceWith(fb);
-  };
-
-  img.src = 'assets/images/spartan.webp';
-}
-
-/* --------------------------------------------------------------------------
-   5c. FOOTER NEON LOGO — same shader as hero, 128px canvas
-   -------------------------------------------------------------------------- */
-function initFooterNeonLogo() {
-  const canvas = $('#footer-neon-canvas');
-  if (!canvas) return;
-
-  const SZ = 128;
-  canvas.width  = SZ;
-  canvas.height = SZ;
-
-  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-  if (!gl) { canvas.style.display = 'none'; return; }
-
-  gl.viewport(0, 0, SZ, SZ);
-
-  const VERT = `attribute vec2 a_pos;varying vec2 v_uv;void main(){v_uv=(a_pos+1.0)*0.5;gl_Position=vec4(a_pos,0.0,1.0);}`;
-  const FRAG = `
-    precision mediump float;
-    varying vec2 v_uv;
-    uniform sampler2D u_tex;
-    uniform float u_time;
-    uniform float u_px;
-    float luma(vec4 c){return dot(c.rgb,vec3(0.299,0.587,0.114))*c.a;}
-    float ring(vec2 uv,float r){
-      float v=0.0;
-      v+=luma(texture2D(u_tex,uv+vec2(r,0.0)));
-      v+=luma(texture2D(u_tex,uv+vec2(-r,0.0)));
-      v+=luma(texture2D(u_tex,uv+vec2(0.0,r)));
-      v+=luma(texture2D(u_tex,uv+vec2(0.0,-r)));
-      v+=luma(texture2D(u_tex,uv+vec2(0.707*r,0.707*r)));
-      v+=luma(texture2D(u_tex,uv+vec2(-0.707*r,0.707*r)));
-      v+=luma(texture2D(u_tex,uv+vec2(0.707*r,-0.707*r)));
-      v+=luma(texture2D(u_tex,uv+vec2(-0.707*r,-0.707*r)));
-      return v/8.0;
-    }
-    void main(){
-      vec2 uv=v_uv;
-      float core=luma(texture2D(u_tex,uv));
-      float g1=ring(uv,u_px*3.5);
-      float g2=ring(uv,u_px*12.0);
-      float g3=ring(uv,u_px*28.0);
-      float shimmer=0.82+0.18*sin(u_time*3.2+uv.x*14.0-uv.y*11.0);
-      float breath=0.91+0.09*sin(u_time*0.9);
-      float vig=1.0-length(uv-0.5)*1.15;
-      vig=clamp(vig,0.0,1.0);
-      vec3 bg=vec3(0.008,0.025,0.14)*vig;
-      vec3 colWide=vec3(0.0,0.28,0.88);
-      vec3 colMid=vec3(0.0,0.75,1.0);
-      vec3 colCore=mix(vec3(0.0,0.88,1.0),vec3(0.52,1.0,1.0),core*shimmer);
-      vec3 col=bg;
-      col+=colWide*g3*1.6*breath;
-      col+=colMid*g2*3.0*breath;
-      col+=colMid*g1*4.5*breath;
-      col+=colCore*core*3.5*shimmer;
-      col=min(col,vec3(1.0));
-      gl_FragColor=vec4(col,1.0);
-    }
-  `;
-
-  function mkShader(type, src) {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, src); gl.compileShader(s); return s;
-  }
-  const prog = gl.createProgram();
-  gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, VERT));
-  gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, FRAG));
-  gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { canvas.style.display='none'; return; }
-  gl.useProgram(prog);
-
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
-  const aPos = gl.getAttribLocation(prog, 'a_pos');
-  gl.enableVertexAttribArray(aPos);
-  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-  const uTime = gl.getUniformLocation(prog, 'u_time');
-  const uTex  = gl.getUniformLocation(prog, 'u_tex');
-  const uPx   = gl.getUniformLocation(prog, 'u_px');
-  gl.uniform1i(uTex, 0);
-  gl.uniform1f(uPx, 1.0 / SZ);
-  gl.clearColor(0, 0.025, 0.14, 1);
-
-  const tex = gl.createTexture();
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-    let running = true;
-    const t0 = performance.now();
-    function loop() {
-      if (!running) return;
-      requestAnimationFrame(loop);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform1f(uTime, (performance.now() - t0) / 1000);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    }
-    loop();
-
-    const footer = $('#site-footer');
-    if (footer) {
-      new IntersectionObserver(([e]) => {
-        running = e.isIntersecting;
-        if (running) loop();
-      }, { rootMargin: '200px' }).observe(footer);
-    }
-  };
-  img.onerror = () => { canvas.style.display = 'none'; };
-  img.src = 'assets/images/spartan.webp';
-}
 
 /* --------------------------------------------------------------------------
    6. SCROLL ANIMATIONS — Intersection Observer
@@ -633,43 +383,35 @@ function initShop() {
   const grid = $('#product-grid');
   if (!grid) return;
 
-  function waitForProducts(cb) {
-    if (typeof WOG_PRODUCTS !== 'undefined') { cb(); return; }
-    const t = setInterval(() => {
-      if (typeof WOG_PRODUCTS !== 'undefined') { clearInterval(t); cb(); }
-    }, 40);
-  }
-
-  waitForProducts(() => {
-    const featured = WOG_PRODUCTS.filter(p => p.featured).slice(0, 8);
-    if (!featured.length) { grid.closest('section')?.remove(); return; }
-    grid.innerHTML = featured.map(p => {
-      const badgeHTML = p.badge
-        ? `<span class="product-card__badge">${p.badge}</span>` : '';
-      const origHTML = p.originalPrice
-        ? `<span class="product-card__original-price">$${p.originalPrice.toFixed(2)}</span>` : '';
-      return `<article class="product-card animate-on-scroll is-visible" role="listitem">
-        <div class="product-card__img-wrap">
-          <img src="${p.image}" alt="${p.name}" loading="lazy"
-               onerror="this.src='https://placehold.co/350x250/0f1923/0ea5e9?text=${encodeURIComponent(p.name)}&font=oswald'" />
-          ${badgeHTML}
-          ${!p.inStock ? '<div class="product-card__out-of-stock">Out of Stock</div>' : ''}
+  // products.js loads with defer before main.js — WOG_PRODUCTS is always defined by this point
+  const featured = WOG_PRODUCTS.filter(p => p.featured).slice(0, 8);
+  if (!featured.length) { grid.closest('section')?.remove(); return; }
+  grid.innerHTML = featured.map(p => {
+    const badgeHTML = p.badge
+      ? `<span class="product-card__badge">${p.badge}</span>` : '';
+    const origHTML = p.originalPrice
+      ? `<span class="product-card__original-price">$${p.originalPrice.toFixed(2)}</span>` : '';
+    return `<article class="product-card animate-on-scroll is-visible" role="listitem">
+      <div class="product-card__img-wrap">
+        <img src="${p.image}" alt="${p.name}" loading="lazy"
+             onerror="this.src='https://placehold.co/350x250/0f1923/0ea5e9?text=${encodeURIComponent(p.name)}&font=oswald'" />
+        ${badgeHTML}
+        ${!p.inStock ? '<div class="product-card__out-of-stock">Out of Stock</div>' : ''}
+      </div>
+      <div class="product-card__body">
+        <p class="product-card__category">${p.brand}</p>
+        <h3 class="product-card__name">${p.name}</h3>
+        <p class="product-card__desc">${p.description.slice(0, 90)}${p.description.length > 90 ? '…' : ''}</p>
+        <div class="product-card__price-row">
+          <span class="product-card__price">$${p.price.toFixed(2)}</span>
+          ${origHTML}
         </div>
-        <div class="product-card__body">
-          <p class="product-card__category">${p.brand}</p>
-          <h3 class="product-card__name">${p.name}</h3>
-          <p class="product-card__desc">${p.description.slice(0, 90)}${p.description.length > 90 ? '…' : ''}</p>
-          <div class="product-card__price-row">
-            <span class="product-card__price">$${p.price.toFixed(2)}</span>
-            ${origHTML}
-          </div>
-          <div class="product-card__actions">
-            <a href="product.html?id=${encodeURIComponent(p.id)}" class="btn btn--primary btn--sm">View Product</a>
-          </div>
+        <div class="product-card__actions">
+          <a href="product.html?id=${encodeURIComponent(p.id)}" class="btn btn--primary btn--sm">View Product</a>
         </div>
-      </article>`;
-    }).join('');
-  });
+      </div>
+    </article>`;
+  }).join('');
 }
 
 /* --------------------------------------------------------------------------
@@ -754,7 +496,19 @@ function initLogoRotate() {
 }
 
 /* --------------------------------------------------------------------------
-   12. FOOTER YEAR
+   12. FOOTER SHIELD — pause shieldPulse animation when footer is off-screen
+   -------------------------------------------------------------------------- */
+function initFooterShield() {
+  const logoLink = document.querySelector('.footer-brand__logo');
+  if (!logoLink) return;
+  const obs = new IntersectionObserver(([entry]) => {
+    logoLink.classList.toggle('anim-paused', !entry.isIntersecting);
+  }, { rootMargin: '100px' });
+  obs.observe(logoLink);
+}
+
+/* --------------------------------------------------------------------------
+   13. FOOTER YEAR
    -------------------------------------------------------------------------- */
 function initFooterYear() {
   const el = $('#footer-year');
