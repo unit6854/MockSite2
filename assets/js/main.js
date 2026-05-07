@@ -229,14 +229,14 @@ function initHeroWebGL() {
   // Interleaved VBO: pos(3) col(3) sz(1) = 7 floats/vertex
   const N = 700, S = 7;
   const data = new Float32Array(N * S);
-  const gold  = [0.784, 0.588, 0.243]; // #c8963e
-  const white = [0.941, 0.929, 0.910]; // #f0ede8
+  const cyan  = [0.0,  0.85, 1.0 ]; // #00D9FF
+  const white = [1.0,  1.0,  1.0 ]; // #FFFFFF
   for (let i = 0; i < N; i++) {
     const o = i * S;
     data[o]   = (Math.random() - 0.5) * 1200;
     data[o+1] = (Math.random() - 0.5) * 800;
     data[o+2] = (Math.random() - 0.5) * 600;
-    const c = Math.random() > 0.85 ? gold : white;
+    const c = Math.random() > 0.75 ? cyan : white;
     data[o+3] = c[0]; data[o+4] = c[1]; data[o+5] = c[2];
     data[o+6] = Math.random() * 2.5 + 0.5;
   }
