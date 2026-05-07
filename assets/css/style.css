@@ -705,9 +705,9 @@ input, textarea, select {
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse at center,
-    rgba(0, 220, 255, 0.28) 0%,
-    rgba(0, 200, 255, 0.12) 28%,
-    rgba(0, 180, 255, 0.04) 46%,
+    rgba(0, 220, 255, 0.35) 0%,
+    rgba(0, 200, 255, 0.15) 28%,
+    rgba(0, 180, 255, 0.05) 46%,
     transparent 60%);
   opacity: 0;
   animation: neon-outer-pulse 9s ease-in-out infinite;
