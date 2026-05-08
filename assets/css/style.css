@@ -747,7 +747,7 @@ input, textarea, select {
 .hero-logo-canvas {
   width: clamp(260px, 29vw, 442px);
   height: clamp(260px, 29vw, 442px);
-  max-width: none;
+  max-width: 100%;
   display: block;
   position: relative;
   filter:
@@ -783,12 +783,11 @@ input, textarea, select {
   .hero__inner {
     grid-template-columns: 1fr;
     justify-items: center;
+    padding-top: 60px;
   }
   .hero__content {
     text-align: center;
     width: 100%;
-    position: relative;
-    z-index: 2;
   }
   .hero__subheading {
     max-width: 100%;
@@ -799,17 +798,15 @@ input, textarea, select {
     align-items: center;
   }
   .hero__logo-wrap {
-    position: absolute;
-    right: -12vw;
-    bottom: 4%;
-    margin: 0;
-    z-index: 1;
+    position: relative;
+    margin: 0 auto;
   }
   .hero-logo-canvas,
   .hero-logo-fallback {
-    width: clamp(260px, 90vw, 420px);
-    height: clamp(260px, 90vw, 420px);
-    max-width: none;
+    width: 70vw;
+    height: 70vw;
+    max-width: 300px;
+    max-height: 300px;
   }
 }
 
