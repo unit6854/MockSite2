@@ -10,6 +10,21 @@
    -------------------------------------------------------------------------- */
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+
+function smoothScrollTo(targetY, duration = 900) {
+  const startY = window.scrollY;
+  const dist   = targetY - startY;
+  if (dist === 0) return;
+  let startTime = null;
+  const easeOutExpo = t => t >= 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    const p = Math.min((ts - startTime) / duration, 1);
+    window.scrollTo(0, startY + dist * easeOutExpo(p));
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
 const qs = (typeof SITE_CONTENT !== 'undefined') ? SITE_CONTENT : {}; // safe alias
 
 /* --------------------------------------------------------------------------
@@ -132,8 +147,13 @@ function initNav() {
     mobileBtn?.setAttribute('aria-expanded', 'false');
     nav?.classList.remove('open');
     document.body.style.overflow = '';
-    const offset = header.offsetHeight + 8;
-    window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
+    const offset  = header.offsetHeight + 8;
+    const targetY = target.getBoundingClientRect().top + window.scrollY - offset;
+    if (window.matchMedia('(min-width: 769px)').matches) {
+      smoothScrollTo(targetY, 900);
+    } else {
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    }
     // Activate a shop tab if the link specifies one
     const tab = link.dataset.shopTab;
     if (tab) {

@@ -73,7 +73,6 @@ html.age-verified .age-gate    { display: none !important; }
 html.age-verified #site-wrapper { display: block !important; }
 
 html {
-  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   color-scheme: dark;
 }
