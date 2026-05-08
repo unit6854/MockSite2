@@ -75,6 +75,7 @@ html.age-verified #site-wrapper { display: block !important; }
 html {
   -webkit-text-size-adjust: 100%;
   color-scheme: dark;
+  overflow-x: hidden;
 }
 
 body {
@@ -86,7 +87,7 @@ body {
   background-color: var(--wp--preset--color--dark);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 html.no-js .animate-on-scroll { opacity: 1 !important; transform: none !important; }
@@ -786,6 +787,8 @@ input, textarea, select {
   .hero__content {
     text-align: center;
     width: 100%;
+    position: relative;
+    z-index: 2;
   }
   .hero__subheading {
     max-width: 100%;
@@ -796,14 +799,17 @@ input, textarea, select {
     align-items: center;
   }
   .hero__logo-wrap {
-    display: flex;
-    justify-self: center;
-    margin-top: var(--wp--custom--spacing--md);
+    position: absolute;
+    right: -12vw;
+    bottom: 4%;
+    margin: 0;
+    z-index: 1;
   }
   .hero-logo-canvas,
   .hero-logo-fallback {
-    width: clamp(910px, 119vw, 1170px);
-    height: clamp(910px, 119vw, 1170px);
+    width: clamp(260px, 90vw, 420px);
+    height: clamp(260px, 90vw, 420px);
+    max-width: none;
   }
 }
 
