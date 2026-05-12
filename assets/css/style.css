@@ -699,6 +699,7 @@ input, textarea, select {
   perspective-origin: center center;
   user-select: none;
   -webkit-user-select: none;
+  touch-action: none;
 }
 .hero__logo-wrap::before {
   content: '';
